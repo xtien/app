@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2020, Zaphod Consulting BV, Christine Karman
+ * This project is free software: you can redistribute it and/or modify it under the terms of
+ * the Apache License, Version 2.0. You can find a copy of the license at
+ * http://www.apache.org/licenses/LICENSE-2.0.
+ */
+
 package nl.christine.app.fragment;
 
 import android.Manifest;
@@ -35,7 +42,7 @@ public class MainFragment extends Fragment {
     public static MainFragment newInstance(){
         return new MainFragment();
     }
-    
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -59,7 +66,7 @@ public class MainFragment extends Fragment {
                 if (getActivity().checkSelfPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
                         != PackageManager.PERMISSION_GRANTED) {
                     if (this.shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                         builder.setTitle("This app needs background location access");
                         builder.setMessage("Please grant location access so this app can detect beacons in the background.");
                         builder.setPositiveButton(android.R.string.ok, null);
@@ -76,7 +83,7 @@ public class MainFragment extends Fragment {
                         builder.show();
                     }
                     else {
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                         builder.setTitle("Functionality limited");
                         builder.setMessage("Since background location access has not been granted, this app will not be able to discover beacons in the background.  Please go to Settings -> Applications -> Permissions and grant background location access to this app.");
                         builder.setPositiveButton(android.R.string.ok, null);

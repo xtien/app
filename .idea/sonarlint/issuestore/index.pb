@@ -1,12 +1,8 @@
 
 <
 build.gradle,f/0/f07866736216be0ee2aba49e392191aeae700a35
-k
-;app/src/main/java/nl/christine/app/settings/MySettings.java,c/4/c462f5680ea9f792d61debbc81ba1ac27ba122d2
 g
 7app/src/main/java/nl/christine/app/dao/SettingsDao.java,9/6/965aceb89c90a878f46fb4731cfd3a1bf7b0d4e6
-e
-5app/src/main/java/nl/christine/app/trace/MyTrace.java,c/1/c17be95460570e37e23b4c02d9c1f4251272d5cd
 F
 app/proguard-rules.pro,9/e/9e08934d811afe28fbc77aaa3c0d747b94348db9
 @
@@ -29,3 +25,11 @@ p
 @app/src/main/java/nl/christine/app/viewmodel/DebugViewModel.java,5/b/5b7a07ae9e1f1fc2592caa9bcaa5447f4fdd288e
 n
 >app/src/main/java/nl/christine/app/fragment/DebugFragment.java,1/a/1a2d020440410522c946e4dd4ded2297b063b9e6
+e
+5app/src/main/java/nl/christine/app/model/MyTrace.java,e/3/e3b82949ce9219e41e9aa90a5fbc13625f2a776e
+e
+5app/src/main/java/nl/christine/app/model/MyDebug.java,4/1/41da22b0675ab268db8ab17182913d9629a43f38
+p
+@app/src/main/java/nl/christine/app/service/BluetoothService.java,a/5/a57b847c6656a83044d70af9a1339d5e66a00848
+m
+=app/src/main/java/nl/christine/app/fragment/MainFragment.java,e/5/e5850652f73b116ec8277c8b1e664e6c727cd06d
