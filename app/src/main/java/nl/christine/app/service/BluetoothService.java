@@ -1,9 +1,6 @@
 package nl.christine.app.service;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.Service;
+import android.app.*;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -11,14 +8,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
+import android.util.Log;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import nl.christine.app.MainActivity;
 import nl.christine.app.R;
 
+/**
+ * BluetoothService does everything bluetooth. It switches on at phone startup, starts discovery,
+ * sets our phone to discoverable. These last two can be switched on and off in the debug fragment
+ */
 public class BluetoothService extends Service {
 
+    private static final String CHANNEL_ID = "3000";
     private IBinder binder;
     private int NOTIFICATION = R.string.local_service_started;
     private NotificationManager notfManager;
@@ -33,17 +37,12 @@ public class BluetoothService extends Service {
     @Override
     public void onCreate() {
         notfManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-        // Display a notification about us starting.  We put an icon in the status bar.
-        showNotification(R.string.local_service_started);
-
-        // Activate bluetooth
+        createNotificationChannel();
+        showPermanentNotification(R.string.local_service_started);
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         registerReceiver(receiver, filter);
-
         bluetoothAdapter.startDiscovery();
     }
 
@@ -63,16 +62,27 @@ public class BluetoothService extends Service {
         unregisterReceiver(receiver);
     }
 
-    private void showNotification(int text) {
+    private void showPermanentNotification(int text){
+        showTheNotification(text, true);
+    }
 
+    private void showNotification(int text){
+        showTheNotification(text, false);
+    }
+
+    private void showTheNotification(int text, boolean isPermanent) {
+
+        Log.d(getClass().getSimpleName(), getString(text));
         // The PendingIntent to launch our activity if the user selects this notification
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                 new Intent(this, MainActivity.class), 0);
 
         // Set the info for the views that show in the notification panel.
         Notification notification = new Notification.Builder(this, "")
-                .setSmallIcon(R.drawable.bluetooth)  // the status icon
+                .setSmallIcon(R.drawable.x10)  // the status icon
+                .setChannelId(CHANNEL_ID)
                 .setTicker("status")  // the status text
+                .setOngoing(isPermanent)
                 .setWhen(System.currentTimeMillis())  // the time stamp
                 .setContentTitle(getText(R.string.local_service_label))  // the label of the entry
                 .setContentText(getString(text))  // the contents of the entry
@@ -90,8 +100,22 @@ public class BluetoothService extends Service {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 String deviceName = device.getName();
                 String deviceHardwareAddress = device.getAddress(); // MAC address
+                Log.d(getClass().getSimpleName(), "devicename " + deviceName + " HWaddress " + deviceHardwareAddress);
             }
         }
     };
 
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
 }

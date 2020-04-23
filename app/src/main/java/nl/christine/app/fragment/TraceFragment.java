@@ -18,6 +18,9 @@ import androidx.lifecycle.ViewModelProviders;
 import nl.christine.app.R;
 import nl.christine.app.viewmodel.TraceViewModel;
 
+/**
+ * Tracefragment shows a trace of bluetooth contacts, discoveries, interactions
+ */
 public class TraceFragment extends Fragment {
 
     private TraceViewModel viewModel;

@@ -18,6 +18,10 @@ import androidx.lifecycle.ViewModelProviders;
 import nl.christine.app.R;
 import nl.christine.app.viewmodel.TraceViewModel;
 
+/**
+ * Settingsfragment contains the settings of the app other than debug settings or settings that
+ * would be available to the user in a production app
+ */
 public class SettingsFragment extends Fragment {
 
     private TraceViewModel viewModel;

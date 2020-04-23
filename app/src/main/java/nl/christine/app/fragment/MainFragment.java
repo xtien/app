@@ -29,6 +29,10 @@ import nl.christine.app.R;
 import nl.christine.app.service.BluetoothService;
 import nl.christine.app.viewmodel.DebugViewModel;
 
+/**
+ * MainFragment contains the main controls of the app. These would include the controls a user in the production
+ * app would have, as well as testing and debugging controls.
+ */
 public class MainFragment extends Fragment {
 
     private BluetoothAdapter bluetoothAdapter;
@@ -39,7 +43,7 @@ public class MainFragment extends Fragment {
     private BluetoothService bluetoothService;
     private boolean bound;
 
-    public static MainFragment newInstance(){
+    public static MainFragment newInstance() {
         return new MainFragment();
     }
 
@@ -48,7 +52,7 @@ public class MainFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.main_fragment, container, false);
-   }
+    }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -63,48 +67,47 @@ public class MainFragment extends Fragment {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (getActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
-                if (getActivity().checkSelfPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    if (this.shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        builder.setTitle("This app needs background location access");
-                        builder.setMessage("Please grant location access so this app can detect beacons in the background.");
-                        builder.setPositiveButton(android.R.string.ok, null);
-                        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    if (getActivity().checkSelfPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        if (this.shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                            builder.setTitle("This app needs background location access");
+                            builder.setMessage("Please grant location access so this app can detect beacons in the background.");
+                            builder.setPositiveButton(android.R.string.ok, null);
+                            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
 
-                            @TargetApi(23)
-                            @Override
-                            public void onDismiss(DialogInterface dialog) {
-                                requestPermissions(new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION},
-                                        PERMISSION_REQUEST_BACKGROUND_LOCATION);
-                            }
+                                @TargetApi(23)
+                                @Override
+                                public void onDismiss(DialogInterface dialog) {
+                                    requestPermissions(new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION},
+                                            PERMISSION_REQUEST_BACKGROUND_LOCATION);
+                                }
 
-                        });
-                        builder.show();
+                            });
+                            builder.show();
+                        } else {
+                            final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                            builder.setTitle("Functionality limited");
+                            builder.setMessage("Since background location access has not been granted, this app will not be able to discover beacons in the background.  Please go to Settings -> Applications -> Permissions and grant background location access to this app.");
+                            builder.setPositiveButton(android.R.string.ok, null);
+                            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+
+                                @Override
+                                public void onDismiss(DialogInterface dialog) {
+                                }
+
+                            });
+                            builder.show();
+                        }
                     }
-                    else {
-                        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        builder.setTitle("Functionality limited");
-                        builder.setMessage("Since background location access has not been granted, this app will not be able to discover beacons in the background.  Please go to Settings -> Applications -> Permissions and grant background location access to this app.");
-                        builder.setPositiveButton(android.R.string.ok, null);
-                        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-
-                            @Override
-                            public void onDismiss(DialogInterface dialog) {
-                            }
-
-                        });
-                        builder.show();
-                    }
-
                 }
             } else {
                 if (!this.shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
                     requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
                                     Manifest.permission.ACCESS_BACKGROUND_LOCATION},
                             PERMISSION_REQUEST_FINE_LOCATION);
-                }
-                else {
+                } else {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setTitle("Functionality limited");
                     builder.setMessage("Since location access has not been granted, this app will not be able to discover beacons.  Please go to Settings -> Applications -> Permissions and grant location access to this app.");
@@ -140,7 +143,6 @@ public class MainFragment extends Fragment {
         @Override
         public void onServiceConnected(ComponentName className,
                                        IBinder service) {
-            // We've bound to LocalService, cast the IBinder and get LocalService instance
             BluetoothService.LocalBinder binder = (BluetoothService.LocalBinder) service;
             bluetoothService = binder.getService();
             bound = true;
@@ -151,5 +153,4 @@ public class MainFragment extends Fragment {
             bound = false;
         }
     };
-
 }

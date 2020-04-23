@@ -1,13 +1,13 @@
 
-œ
-java:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(¡é††8öÛ£™š.
-}
-java:S1450"]Remove the "sendSickButton" field and declare it as a local variable in the relevant methods.(û‡˜·üÿÿÿÿ8‰”™š.
-A
-java:S1068"-Remove this unused "viewModel" private field.(ÁçÉ
-~
-java:S1450"^Remove the "sendEventButton" field and declare it as a local variable in the relevant methods.(øÑ¢–ûÿÿÿÿ8‰”™š.
-l
-java:S1450"XRemove the "viewModel" field and declare it as a local variable in the relevant methods.(ÁçÉ
-œ
-java:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(¡é††8ÌÓ¡™š.
+
+java:S1450"]Remove the "sendSickButton" field and declare it as a local variable in the relevant methods.(û‡˜·üÿÿÿÿ8‰”™š.
+€
+java:S1450"^Remove the "sendEventButton" field and declare it as a local variable in the relevant methods.(øÑ¢–ûÿÿÿÿ8‰”™š.
+n
+java:S1450"XRemove the "viewModel" field and declare it as a local variable in the relevant methods.(ÁçÉ
+C
+java:S1068"-Remove this unused "viewModel" private field.(ÁçÉ
+
+java:S1186'"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(¡é††8öÛ£™š.
+
+java:S11860"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(¡é††8ÌÓ¡™š.

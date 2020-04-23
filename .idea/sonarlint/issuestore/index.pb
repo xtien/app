@@ -33,3 +33,6 @@ p
 @app/src/main/java/nl/christine/app/service/BluetoothService.java,a/5/a57b847c6656a83044d70af9a1339d5e66a00848
 m
 =app/src/main/java/nl/christine/app/fragment/MainFragment.java,e/5/e5850652f73b116ec8277c8b1e664e6c727cd06d
+:
+
+.gitignore,a/5/a5cc2925ca8258af241be7e5b0381edf30266302

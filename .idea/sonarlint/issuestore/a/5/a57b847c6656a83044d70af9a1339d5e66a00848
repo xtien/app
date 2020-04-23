@@ -1,14 +1,14 @@
 
-Z
-java:S1481":Remove this unused "deviceHardwareAddress" local variable.(Ž‚ž¹øÿÿÿÿ8±‘Ëšš.
-z
-java:S1450"_Remove the "bluetoothAdapter" field and declare it as a local variable in the relevant methods.(ÞÉ×¶8Á„Žšš.
-v	java:S116"WRename this field "NOTIFICATION" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÎšÅÉÿÿÿÿÿ8ùî³™š.
-J
-java:S1481"/Remove this unused "deviceName" local variable.(û¸Ö¸8±‘Ëšš.
-N
-java:S1172".Remove this unused method parameter "context".(žš³ÿÿÿÿÿÿ8±‘Ëšš.
-i
-java:S1854"IRemove this useless assignment to local variable "deviceHardwareAddress".(Ž‚ž¹øÿÿÿÿ8±‘Ëšš.
-Y
-java:S1854">Remove this useless assignment to local variable "deviceName".(û¸Ö¸8±‘Ëšš.
+|
+java:S1450"_Remove the "bluetoothAdapter" field and declare it as a local variable in the relevant methods.(ÞÉ×¶8Á„Žšš.
+\
+java:S1481\":Remove this unused "deviceHardwareAddress" local variable.(Ž‚ž¹øÿÿÿÿ8±‘Ëšš.
+L
+java:S1481["/Remove this unused "deviceName" local variable.(û¸Ö¸8±‘Ëšš.
+P
+java:S1172W".Remove this unused method parameter "context".(žš³ÿÿÿÿÿÿ8±‘Ëšš.
+[
+java:S1854[">Remove this useless assignment to local variable "deviceName".(û¸Ö¸8±‘Ëšš.
+x	java:S116"WRename this field "NOTIFICATION" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÎšÅÉÿÿÿÿÿ8ùî³™š.
+k
+java:S1854\"IRemove this useless assignment to local variable "deviceHardwareAddress".(Ž‚ž¹øÿÿÿÿ8±‘Ëšš.

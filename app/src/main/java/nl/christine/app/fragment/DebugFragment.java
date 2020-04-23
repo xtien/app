@@ -12,6 +12,9 @@ import androidx.lifecycle.ViewModelProviders;
 import nl.christine.app.R;
 import nl.christine.app.viewmodel.DebugViewModel;
 
+/**
+ * This fragment has additional debug settings
+ */
 public class DebugFragment extends Fragment {
 
     private DebugViewModel viewModel;
