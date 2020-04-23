@@ -1,7 +1,7 @@
 
-z
-java:S1450"XRemove the "viewModel" field and declare it as a local variable in the relevant methods.(Éôæàùÿÿÿÿ8ÔÖŠ—š.
-O
-java:S1068"-Remove this unused "viewModel" private field.(Éôæàùÿÿÿÿ8äÀŠ—š.
 M
-java:S1135("2Complete the task associated to this TODO comment.(ûìÿÖøÿÿÿÿ
+java:S1135,"2Complete the task associated to this TODO comment.(ûìÿÖøÿÿÿÿ
+z
+java:S1450"XRemove the "viewModel" field and declare it as a local variable in the relevant methods.(Éôæàùÿÿÿÿ8ÔÖŠ—š.
+O
+java:S1068"-Remove this unused "viewModel" private field.(Éôæàùÿÿÿÿ8äÀŠ—š.

@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -59,10 +60,9 @@ public class MainFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (bluetoothAdapter == null) {
-            TextView errorTextView = getActivity().findViewById(R.id.error_message);
-            errorTextView.setText(R.string.no_bluetooth);
-        }
+
+        switchBTOn();
+        makeDiscoverable();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (getActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -131,6 +131,26 @@ public class MainFragment extends Fragment {
         } else {
             doService();
         }
+    }
+
+    private void switchBTOn() {
+        if (bluetoothAdapter == null) {
+            TextView errorTextView = getActivity().findViewById(R.id.error_message);
+            errorTextView.setText(R.string.no_bluetooth);
+            return;
+        } else {
+            if (!bluetoothAdapter.isEnabled()) {
+                startActivityForResult(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE), 1);
+                Toast.makeText(getActivity().getApplicationContext(), "Bluetooth Turned ON", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void makeDiscoverable() {
+        Intent icycle = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+        icycle.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
+        startActivityForResult(icycle, 1);
+        Toast.makeText(getActivity().getApplicationContext(), "Making Device Discoverable", Toast.LENGTH_SHORT).show();
     }
 
     private void doService() {

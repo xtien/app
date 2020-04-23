@@ -22,6 +22,7 @@ import nl.christine.app.R;
  */
 public class BluetoothService extends Service {
 
+    private String LOGTAG = getClass().getSimpleName();
     private static final String CHANNEL_ID = "3000";
     private IBinder binder;
     private int NOTIFICATION = R.string.local_service_started;
@@ -44,6 +45,10 @@ public class BluetoothService extends Service {
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         registerReceiver(receiver, filter);
         bluetoothAdapter.startDiscovery();
+        Intent icycle = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+        icycle.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        icycle.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
+        startActivity(icycle);
     }
 
     @Nullable
@@ -60,6 +65,7 @@ public class BluetoothService extends Service {
         // Tell the user we stopped.
         Toast.makeText(this, R.string.local_service_stopped, Toast.LENGTH_SHORT).show();
         unregisterReceiver(receiver);
+        bluetoothAdapter.cancelDiscovery();
     }
 
     private void showPermanentNotification(int text){
@@ -72,7 +78,7 @@ public class BluetoothService extends Service {
 
     private void showTheNotification(int text, boolean isPermanent) {
 
-        Log.d(getClass().getSimpleName(), getString(text));
+        Log.d(LOGTAG, getString(text));
         // The PendingIntent to launch our activity if the user selects this notification
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                 new Intent(this, MainActivity.class), 0);
@@ -100,7 +106,7 @@ public class BluetoothService extends Service {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 String deviceName = device.getName();
                 String deviceHardwareAddress = device.getAddress(); // MAC address
-                Log.d(getClass().getSimpleName(), "devicename " + deviceName + " HWaddress " + deviceHardwareAddress);
+                Log.d(LOGTAG, "devicename " + deviceName + " HWaddress " + deviceHardwareAddress);
             }
         }
     };

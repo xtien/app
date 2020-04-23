@@ -1,22 +1,5 @@
 
-V
-java:S1068%"4Remove this unused "bluetoothService" private field.(ªÕÚúÿÿÿÿ8èõú™š.
-F
-java:S1068&")Remove this unused "bound" private field.(¶Şªì8ˆöë™š.
-|
-java:S1450)"_Remove the "bluetoothAdapter" field and declare it as a local variable in the relevant methods.(ŞÉ×¶8Ûà³›š.
-}
-java:S1450$"[Remove the "pagerAdapter" field and declare it as a local variable in the relevant methods.(ÖÊ±Ëúÿÿÿÿ8¦Ìêš.
-C	java:S1310""Add a default case to this switch.(×ö³–úÿÿÿÿ8­šš.
-
-java:S1186|"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ğÂ¤8µ·°›š.
-m
-java:S13010"KReplace this "switch" statement by "if" statements to increase readability.(×ö³–úÿÿÿÿ8­šš.
-t
-java:S37768"RRefactor this method to reduce its Cognitive Complexity from 19 to the 15 allowed.(¨Œşÿÿÿÿ8µ·°›š.
-[
-java:S1128">Remove this unused import 'android.bluetooth.BluetoothDevice'.(˜¾Ÿü8´çËšš.
-
-java:S1186f"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ğÂ¤8µ·°›š.
 z
-java:S1450""XRemove the "viewPager" field and declare it as a local variable in the relevant methods.(åÙ¬Ïûÿÿÿÿ8«†ìš.
+java:S1450"XRemove the "viewPager" field and declare it as a local variable in the relevant methods.(åÙ¬Ïûÿÿÿÿ8«†ìš.
+}
+java:S1450"[Remove the "pagerAdapter" field and declare it as a local variable in the relevant methods.(ÖÊ±Ëúÿÿÿÿ8¦Ìêš.
