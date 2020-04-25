@@ -8,27 +8,18 @@
 package nl.christine.app;
 
 import android.app.Application;
-import android.content.Context;
 
 public class MyApplication extends Application {
 
     // https://proandroiddev.com/dagger-2-component-builder-1f2b91237856
     // https://medium.com/@marco_cattaneo/integrate-dagger-2-with-room-persistence-library-in-few-lines-abf48328eaeb
 
-    private static Context applicationContext;
-    private MyAppComponent component;
+    private MyAppComponent appComponent;
 
-    public MyApplication(){
-        applicationContext = getApplicationContext();
-    }
-
-    @Override public void onCreate() {
+    @Override
+    public void onCreate() {
         super.onCreate();
 
-        MyAppComponent appComponent = DaggerMyAppComponent.builder().application(this).build();
-    }
-
-    public static Context getAppContext(){
-        return applicationContext;
+        appComponent = DaggerMyAppComponent.builder().application(this).build();
     }
 }

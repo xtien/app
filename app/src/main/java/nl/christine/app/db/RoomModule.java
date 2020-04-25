@@ -8,24 +8,27 @@
 package nl.christine.app.db;
 
 import android.app.Application;
-import android.content.Context;
-import android.content.SharedPreferences;
+import androidx.room.Room;
 import dagger.Module;
 import dagger.Provides;
+import nl.christine.app.dao.SettingsDao;
 
 import javax.inject.Singleton;
 
 @Module
-public class AppModule {
+public class RoomModule {
 
-    private AppDatabase db;
-    Application application;
+    private AppDatabase appDatabase;
 
-    @Provides
     @Singleton
-    public SharedPreferences providePreferences(
-            Application application) {
-        return application.getSharedPreferences(
-                "store", Context.MODE_PRIVATE);
+    @Provides
+    AppDatabase providesAppDatabase(Application application){
+        return Room.databaseBuilder(application, AppDatabase.class, "app-database").build();
+    }
+
+    @Singleton
+    @Provides
+    SettingsDao providesSettingsDao(AppDatabase appDatabase){
+        return appDatabase.settingsDao();
     }
 }

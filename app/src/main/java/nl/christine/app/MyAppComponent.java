@@ -11,12 +11,13 @@ import android.app.Application;
 import dagger.BindsInstance;
 import dagger.Component;
 import nl.christine.app.db.AppModule;
+import nl.christine.app.db.RoomModule;
 import nl.christine.app.fragment.MainFragment;
 
 import javax.inject.Singleton;
 
 @Singleton
-@Component(modules = {AppModule.class})
+@Component(modules = {AppModule.class, RoomModule.class})
 public interface MyAppComponent {
 
     void inject(MainActivity mainActivity);
@@ -25,9 +26,16 @@ public interface MyAppComponent {
 
     @Component.Builder
     interface Builder {
-        MyAppComponent build();
 
         @BindsInstance
         Builder application(Application application);
+
+        @BindsInstance
+        Builder appModule(AppModule appModule);
+
+        @BindsInstance
+        Builder roomModule(RoomModule roomModule);
+
+        MyAppComponent build();
     }
 }
