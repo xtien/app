@@ -1,9 +1,40 @@
 
-|
-java:S1450"_Remove the "bluetoothAdapter" field and declare it as a local variable in the relevant methods.(ŞÉ×¶8Á„šš.
-r	java:S116"QRename this field "LOGTAG" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ñ€– øÿÿÿÿ8İ¾Ø´š.
-x	java:S116"WRename this field "NOTIFICATION" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÎšÅÉÿÿÿÿÿ8ùî³™š.
-P
-java:S1172f".Remove this unused method parameter "context".(š³ÿÿÿÿÿÿ8±‘Ëšš.
+
+java:S1186o"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(í›Ã…8üùô·š.
+b
+java:S1854K"@Remove this useless assignment to local variable "intentAction".(ŞÍ†¿ıÿÿÿÿ8®ïÑ¸š.
+a
+java:S1128"DRemove this unused import 'android.bluetooth.le.BluetoothLeScanner'.(ôäÛû8üùô·š.
+X
+java:S1144«"5Remove this unused private "showNotification" method.(úËÂ±úÿÿÿÿ8ÿ‚Ç²š.
+M
+java:S1128"+Remove this unused import 'java.util.UUID'.(ÀãÄ£úÿÿÿÿ8©Ä¡¸š.
+b
+java:S11243"EReorder the modifiers to comply with the Java Language Specification.(ç™Íö8©Ä¡¸š.
+g
+java:S11245"EReorder the modifiers to comply with the Java Language Specification.(ï¸á¶ÿÿÿÿÿ8©Ä¡¸š.
+g
+java:S11247"EReorder the modifiers to comply with the Java Language Specification.(Ä’«ùÿÿÿÿ8©Ä¡¸š.
 W
-java:S1144J"5Remove this unused private "showNotification" method.(úËÂ±úÿÿÿÿ8ÿ‚Ç²š.
+java:S1068+":Remove this unused "bluetoothDeviceAddress" private field.(Ø´³¦8©Ä¡¸š.
+P
+java:S1068-"3Remove this unused "connectionState" private field.(öíòŠ8©Ä¡¸š.
+Q
+java:S10680"4Remove this unused "STATE_CONNECTING" private field.(üÀÔ8©Ä¡¸š.
+N
+java:S1481I"1Remove this unused "intentAction" local variable.(°•Æë8®ïÑ¸š.
+r	java:S116!"QRename this field "LOGTAG" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ñ€– øÿÿÿÿ8İ¾Ø´š.
+g
+java:S11249"EReorder the modifiers to comply with the Java Language Specification.(âô•ùøÿÿÿÿ8©Ä¡¸š.
+g
+java:S1124;"EReorder the modifiers to comply with the Java Language Specification.(¦æÅœıÿÿÿÿ8©Ä¡¸š.
+[
+java:S1128"9Remove this unused import 'android.content.IntentFilter'.(ò³ñ£ÿÿÿÿÿ8Ğ»”¹š.
+E	java:S108[")Either remove or fill this block of code.(É¶åÍ8®ïÑ¸š.
+b
+java:S1854R"@Remove this useless assignment to local variable "intentAction".(ùş¸ºúÿÿÿÿ8®ïÑ¸š.
+Q
+java:S1172Ç".Remove this unused method parameter "context".(š³ÿÿÿÿÿÿ8±‘Ëšš.
+x	java:S116$"WRename this field "NOTIFICATION" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÎšÅÉÿÿÿÿÿ8ùî³™š.
+I
+java:S1068(",Remove this unused "scanning" private field.(‰ñ®å8üùô·š.

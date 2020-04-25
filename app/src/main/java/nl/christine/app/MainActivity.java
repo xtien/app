@@ -34,5 +34,6 @@ public class MainActivity extends AppCompatActivity {
         pagerAdapter.addFragment(TraceFragment.newInstance());
         pagerAdapter.addFragment(SettingsFragment.newInstance());
         viewPager.setAdapter(pagerAdapter);
+
     }
 }

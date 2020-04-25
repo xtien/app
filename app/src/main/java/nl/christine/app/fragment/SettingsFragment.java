@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import nl.christine.app.R;
+import nl.christine.app.viewmodel.SettingsViewModel;
 import nl.christine.app.viewmodel.TraceViewModel;
 
 /**
@@ -24,7 +25,7 @@ import nl.christine.app.viewmodel.TraceViewModel;
  */
 public class SettingsFragment extends Fragment {
 
-    private TraceViewModel viewModel;
+    private SettingsViewModel viewModel;
 
     public static SettingsFragment newInstance() {
         return new SettingsFragment();
@@ -40,7 +41,7 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        viewModel = ViewModelProviders.of(this).get(TraceViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(SettingsViewModel.class);
         // TODO: Use the ViewModel
     }
 

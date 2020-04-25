@@ -18,7 +18,8 @@ import android.os.IBinder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -26,9 +27,15 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.room.Room;
 import nl.christine.app.R;
+import nl.christine.app.dao.SettingsDao;
+import nl.christine.app.db.AppDatabase;
 import nl.christine.app.service.BluetoothService;
-import nl.christine.app.viewmodel.DebugViewModel;
+import nl.christine.app.viewmodel.SettingsViewModel;
+import dagger.android.AndroidInjection;
+
+import javax.inject.Inject;
 
 /**
  * MainFragment contains the main controls of the app. These would include the controls a user in the production
@@ -43,6 +50,15 @@ public class MainFragment extends Fragment {
 
     private BluetoothService bluetoothService;
     private boolean bound;
+    private Switch discoverSwitch;
+    private TextView discoverText;
+    private Switch peripheralSwitch;
+    private TextView peripheralText;
+
+    private SettingsViewModel settingsViewModel;
+
+    @Inject
+    public SettingsDao settingsDao;
 
     public static MainFragment newInstance() {
         return new MainFragment();
@@ -56,13 +72,41 @@ public class MainFragment extends Fragment {
     }
 
     @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        discoverSwitch = view.findViewById(R.id.discover_switch);
+        discoverText = view.findViewById(R.id.discover_text);
+        peripheralSwitch = view.findViewById(R.id.peripheral_switch);
+        peripheralText = view.findViewById(R.id.peripheral_text);
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        AppDatabase db = Room.databaseBuilder(getActivity().getApplicationContext(),
+                AppDatabase.class, "settings-db").build();
 
+        settingsViewModel = ViewModelProviders.of(this).get(SettingsViewModel.class);
+        settingsViewModel.loadSettings();
+
+        discoverSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+            }
+        });
+
+        peripheralSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+            }
+        });
+
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         switchBTOn();
-        makeDiscoverable();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (getActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -144,13 +188,6 @@ public class MainFragment extends Fragment {
                 Toast.makeText(getActivity().getApplicationContext(), "Bluetooth Turned ON", Toast.LENGTH_SHORT).show();
             }
         }
-    }
-
-    private void makeDiscoverable() {
-        Intent icycle = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-        icycle.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
-        startActivityForResult(icycle, 1);
-        Toast.makeText(getActivity().getApplicationContext(), "Making Device Discoverable", Toast.LENGTH_SHORT).show();
     }
 
     private void doService() {
