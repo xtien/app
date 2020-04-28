@@ -40,7 +40,11 @@ h
 8app/src/main/java/nl/christine/app/model/MySettings.java,2/2/227170892f93372f490b265989c344ca27b52195
 g
 7app/src/main/java/nl/christine/app/db/SettingsView.java,a/4/a4d99afa8b35d27ca2d87884ea7ddd603b6c48d8
-f
-6app/src/main/java/nl/christine/app/db/AppDatabase.java,0/f/0fe73cef88233c24385aa6ef5b72bb2981a3b8dd
 e
 5app/src/main/java/nl/christine/app/MyApplication.java,a/a/aac49f252f24bd353135c6c8e0cde6754da655a1
+k
+;app/src/main/java/nl/christine/app/db/SettingsDatabase.java,e/9/e96ec26e305d937119617fc6d52ddcd1927c3a6d
+m
+=app/src/main/java/nl/christine/app/db/SettingsRepository.java,e/6/e66e4ebb991abfc54ef4c7852761fbb4a7a319b2
+j
+:app/src/main/java/nl/christine/app/fragment/MyAdapter.java,1/7/1767f7688728e929f52a96fd721c17344530e0c8

@@ -70,14 +70,14 @@ public class BluetoothService extends Service {
                     if (newState == BluetoothProfile.STATE_CONNECTED) {
                         intentAction = ACTION_GATT_CONNECTED;
                         connectionState = STATE_CONNECTED;
-                        Log.i(LOGTAG, "Connected to GATT server.");
-                        Log.i(LOGTAG, "Attempting to start service discovery:" +
+                        log(LOGTAG, "Connected to GATT server.");
+                        log(LOGTAG, "Attempting to start service discovery:" +
                                 bluetoothGatt.discoverServices());
 
                     } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                         intentAction = ACTION_GATT_DISCONNECTED;
                         connectionState = STATE_DISCONNECTED;
-                        Log.i(LOGTAG, "Disconnected from GATT server.");
+                        log(LOGTAG, "Disconnected from GATT server.");
                     }
                 }
 
@@ -86,7 +86,7 @@ public class BluetoothService extends Service {
                 public void onServicesDiscovered(BluetoothGatt gatt, int status) {
                     if (status == BluetoothGatt.GATT_SUCCESS) {
                     } else {
-                        Log.i(LOGTAG, "onServicesDiscovered received: " + status);
+                        log(LOGTAG, "onServicesDiscovered received: " + status);
                     }
                 }
 
@@ -96,10 +96,18 @@ public class BluetoothService extends Service {
                                                  BluetoothGattCharacteristic characteristic,
                                                  int status) {
                     if (status == BluetoothGatt.GATT_SUCCESS) {
-                        Log.i(LOGTAG, "onCharacteristicRead received: " + status);
+                        log(LOGTAG, "onCharacteristicRead received: " + status);
                     }
                 }
             };
+
+    private void log(String logtag, String message) {
+        Log.i(logtag, message);
+        Intent icycle = new Intent();
+        icycle.setAction("nl.christine.app.message");
+        icycle.putExtra("message", message);
+        sendBroadcast(icycle);
+    }
 
     private ScanCallback leScanCallback =
             new ScanCallback() {
@@ -109,7 +117,7 @@ public class BluetoothService extends Service {
 
                 @Override
                 public void onScanResult(int callbackType, ScanResult result) {
-                    Log.d(LOGTAG, "BT LE device " + result.getDevice().getAddress());
+                    log(LOGTAG, "BT LE device " + result.getDevice().getAddress());
                     result.getDevice().connectGatt(getApplicationContext(), false, gattCallback);
 
                 }
@@ -123,7 +131,7 @@ public class BluetoothService extends Service {
         final BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         bluetoothAdapter = bluetoothManager.getAdapter();
         if (!bluetoothAdapter.isEnabled()) {
-            Log.d(LOGTAG, "bluetoothadapter not enabled");
+            log(LOGTAG, "bluetoothadapter not enabled");
         }
         scanner = bluetoothAdapter.getBluetoothLeScanner();
 

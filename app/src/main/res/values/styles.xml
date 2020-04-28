@@ -11,6 +11,7 @@
     <style name="text">
         <item name="android:textColor">@color/black</item>
     </style>
+
     <style name="title">
         <item name="android:textColor">@color/black</item>
         <item name="android:textSize">24dp</item>

@@ -18,7 +18,6 @@ import android.os.IBinder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,11 +25,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import nl.christine.app.R;
-import nl.christine.app.model.MySettings;
 import nl.christine.app.service.BluetoothService;
 import nl.christine.app.viewmodel.SettingsViewModel;
 
@@ -51,8 +49,22 @@ public class MainFragment extends Fragment {
     private TextView discoverText;
     private Switch peripheralSwitch;
     private TextView peripheralText;
+    private RecyclerView listView;
 
     private SettingsViewModel settingsViewModel;
+    private LinearLayoutManager layoutManager;
+    private MyAdapter adapter;
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            String message = bundle.getString("message");
+            adapter.addMessage(message);
+            adapter.notifyDataSetChanged();
+        }
+    };
 
     public static MainFragment newInstance() {
         return new MainFragment();
@@ -71,11 +83,17 @@ public class MainFragment extends Fragment {
         discoverText = view.findViewById(R.id.discover_text);
         peripheralSwitch = view.findViewById(R.id.peripheral_switch);
         peripheralText = view.findViewById(R.id.peripheral_text);
+        listView = view.findViewById(R.id.listview);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        adapter = new MyAdapter();
+        layoutManager = new LinearLayoutManager(getActivity());
+        listView.setLayoutManager(layoutManager);
+        listView.setAdapter(adapter);
 
         settingsViewModel = ViewModelProviders.of(this).get(SettingsViewModel.class);
         settingsViewModel.getSettings().observe(getActivity(), settings -> {
@@ -157,6 +175,16 @@ public class MainFragment extends Fragment {
         } else {
             doService();
         }
+
+        IntentFilter filter = new IntentFilter("nl.christine.app.message");
+        filter.addAction("nl.christine.app.message");
+        getActivity().registerReceiver(receiver, filter);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().unregisterReceiver(receiver);
     }
 
     private void switchBTOn() {

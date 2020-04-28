@@ -1,5 +1,7 @@
 
-L
-java:S1068"/Remove this unused "settingsDao" private field.(ñğÉŸ8ò¤ÖŞš.
-£
-java:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(³ó’°øÿÿÿÿ8‘ç£Š›.
+a
+java:S1128"?Remove this unused import 'androidx.lifecycle.MutableLiveData'.(Íèæâıÿÿÿÿ8¼½¥œ.
+Y
+java:S1128"=Remove this unused import 'nl.christine.app.dao.SettingsDao'.(öóßc8Î ¢œ.
+[
+java:S1128"9Remove this unused import 'androidx.lifecycle.ViewModel'.(ÛÒÚ“úÿÿÿÿ8àĞ œ.
