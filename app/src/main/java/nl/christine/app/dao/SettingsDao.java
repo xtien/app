@@ -27,4 +27,7 @@ public interface SettingsDao {
 
     @Query("update settings_table set discovering = :discovering where id = 0")
     void setDiscover(boolean discovering);
+
+    @Query("select uuid from settings_table where id = 0")
+    String getUUID();
 }

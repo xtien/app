@@ -10,6 +10,7 @@ package nl.christine.app.fragment;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
 import android.content.*;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -25,10 +26,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import nl.christine.app.R;
+import nl.christine.app.model.MySettings;
 import nl.christine.app.service.BluetoothService;
 import nl.christine.app.viewmodel.SettingsViewModel;
 
@@ -50,6 +53,7 @@ public class MainFragment extends Fragment {
     private Switch peripheralSwitch;
     private TextView peripheralText;
     private RecyclerView listView;
+    private TextView uuidView;
 
     private SettingsViewModel settingsViewModel;
     private LinearLayoutManager layoutManager;
@@ -63,6 +67,7 @@ public class MainFragment extends Fragment {
             String message = bundle.getString("message");
             adapter.addMessage(message);
             adapter.notifyDataSetChanged();
+            listView.smoothScrollToPosition(adapter.getItemCount() - 1);
         }
     };
 
@@ -79,6 +84,7 @@ public class MainFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        uuidView = view.findViewById(R.id.uuid);
         discoverSwitch = view.findViewById(R.id.discover_switch);
         discoverText = view.findViewById(R.id.discover_text);
         peripheralSwitch = view.findViewById(R.id.peripheral_switch);
@@ -89,6 +95,10 @@ public class MainFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        SharedPreferences prefs = getActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
+        uuidView.setText(prefs.getString("uuid", ""));
+
 
         adapter = new MyAdapter();
         layoutManager = new LinearLayoutManager(getActivity());

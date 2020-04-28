@@ -16,6 +16,9 @@ public class MySettings {
     @ColumnInfo(name = "discovering")
     private boolean isDiscovering = false;
 
+    @ColumnInfo(name = "uuid")
+    private String uuid;
+
     public boolean isPeripheral() {
         return isPeripheral;
     }
@@ -38,5 +41,13 @@ public class MySettings {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 }

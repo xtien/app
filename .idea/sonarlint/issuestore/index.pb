@@ -48,3 +48,5 @@ m
 =app/src/main/java/nl/christine/app/db/SettingsRepository.java,e/6/e66e4ebb991abfc54ef4c7852761fbb4a7a319b2
 j
 :app/src/main/java/nl/christine/app/fragment/MyAdapter.java,1/7/1767f7688728e929f52a96fd721c17344530e0c8
+o
+?app/src/main/java/nl/christine/app/fragment/BaseViewHolder.java,f/6/f6c25f527cee6d71440e500be4f95d8941409e7d

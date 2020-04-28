@@ -1,32 +1,51 @@
 
-g
-java:S11240"EReorder the modifiers to comply with the Java Language Specification.(ï¸á¶ÿÿÿÿÿ8©˜–›.
-b
-java:S1854N"@Remove this useless assignment to local variable "intentAction".(ùş¸ºúÿÿÿÿ8©˜–›.
-E	java:S108W")Either remove or fill this block of code.(É¶åÍ8©˜–›.
-I
-java:S1068#",Remove this unused "scanning" private field.(‰ñ®å8©˜–›.
+K
+java:S1604Å"(Make this anonymous inner class a lambda(Õ£šúÿÿÿÿÿ8ïí’‰œ.
 P
-java:S1068("3Remove this unused "connectionState" private field.(öíòŠ8çæ«±›.
-r	java:S116"QRename this field "LOGTAG" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ñ€– øÿÿÿÿ8İ¾Ø´š.
-x	java:S116"WRename this field "NOTIFICATION" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÎšÅÉÿÿÿÿÿ8ùî³™š.
-g
-java:S11246"EReorder the modifiers to comply with the Java Language Specification.(¦æÅœıÿÿÿÿ8©˜–›.
-g
-java:S11244"EReorder the modifiers to comply with the Java Language Specification.(âô•ùøÿÿÿÿ8©˜–›.
-
-java:S1186k"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(í›Ã…8©˜–›.
-b
-java:S1124."EReorder the modifiers to comply with the Java Language Specification.(ç™Íö8©˜–›.
-N
-java:S1481E"1Remove this unused "intentAction" local variable.(°•Æë8©˜–›.
+java:S1068."3Remove this unused "connectionState" private field.(öíòŠ8”È†œ.
+i
+java:S2259¸"KA "NullPointerException" could be thrown; "bluetoothGatt" is nullable here.(Ú¨¡ò8Âó£œ.
 W
-java:S1068&":Remove this unused "bluetoothDeviceAddress" private field.(Ø´³¦8çæ«±›.
-b
-java:S1854G"@Remove this useless assignment to local variable "intentAction".(ŞÍ†¿ıÿÿÿÿ8©˜–›.
-X
-java:S1144¬"5Remove this unused private "showNotification" method.(úËÂ±úÿÿÿÿ8®”­±›.
-g
-java:S11242"EReorder the modifiers to comply with the Java Language Specification.(Ä’«ùÿÿÿÿ8©˜–›.
+java:S1068-":Remove this unused "bluetoothDeviceAddress" private field.(Ø´³¦8”È†œ.
 Q
-java:S1068+"4Remove this unused "STATE_CONNECTING" private field.(üÀÔ8çæ«±›.
+java:S1068)"/Remove this unused "SCAN_PERIOD" private field.(İ‘—Úÿÿÿÿÿ8’àì†œ.
+b
+java:S11244"EReorder the modifiers to comply with the Java Language Specification.(ç™Íö8”È†œ.
+r	java:S116!"QRename this field "LOGTAG" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ñ€– øÿÿÿÿ8İ¾Ø´š.
+E
+java:S1604Ä"(Make this anonymous inner class a lambda(ç’ƒL8—¼—œ.
+g
+java:S11248"EReorder the modifiers to comply with the Java Language Specification.(Ä’«ùÿÿÿÿ8”È†œ.
+]
+java:S3398±"?Move this method into the anonymous class declared at line 281.(Êçø 8¼€Šœ.
+a
+java:S1155¿">Use isEmpty() to check whether the collection is empty or not.(ÈäèËùÿÿÿÿ8—¼—œ.
+Y	java:S125„"<This block of commented-out lines of code should be removed.(÷éîã8‘ú˜‰œ.
+]
+java:S1117½"?Rename "serviceUUID" which hides the field declared at line 42.(ºôÓÛ8äÖœ.
+g
+java:S1124<"EReorder the modifiers to comply with the Java Language Specification.(¦æÅœıÿÿÿÿ8”È†œ.
+Y	java:S125¬"<This block of commented-out lines of code should be removed.(Şèò÷8…ƒÑ‰œ.
+g
+java:S11246"EReorder the modifiers to comply with the Java Language Specification.(ï¸á¶ÿÿÿÿÿ8”È†œ.
+C	java:S131X""Add a default case to this switch.(³ÒÂŒÿÿÿÿÿ8¾¨‰œ.
+F
+java:S1604›"(Make this anonymous inner class a lambda(ş²ìƒ8„ò‹œ.
+Y	java:S125‰"<This block of commented-out lines of code should be removed.(Ìëçª8‘ú˜‰œ.
+g
+java:S1124:"EReorder the modifiers to comply with the Java Language Specification.(âô•ùøÿÿÿÿ8”È†œ.
+s	java:S117¸"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¯á¶•ÿÿÿÿÿ8„×œ.
+]	java:S125"<This block of commented-out lines of code should be removed.(²Ÿÿÿÿÿÿ8‘ú˜‰œ.
+x	java:S116$"WRename this field "NOTIFICATION" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÎšÅÉÿÿÿÿÿ8ùî³™š.
+=	java:S131]""Add a default case to this switch.(¥ÚÀ8…×š‹œ.
+U
+java:S2589»"7Remove this expression which always evaluates to "true"(¦çÀâ8„×œ.
+E	java:S108s")Either remove or fill this block of code.(úÜ¸Ğ8ù™Šœ.
+F
+java:S1185ï"(Remove this method to simply inherit it.(‡ñò§8ïí’‰œ.
+P
+java:S1068G".Remove this unused "isRetrying" private field.(²ìí‚üÿÿÿÿ8¼ıœ.
+{
+java:S1450G"YRemove the "isRetrying" field and declare it as a local variable in the relevant methods.(²ìí‚üÿÿÿÿ8¼ıœ.
+E
+java:S1604p"(Make this anonymous inner class a lambda(†£°î8õËŠœ.

@@ -27,6 +27,10 @@ public class SettingsRepository {
         return settings;
     }
 
+    public String getUUID(){
+        return settingsDao.getUUID();
+    }
+
     public void update(final MySettings settings){
         SettingsDatabase.databaseWriteExecutor.execute(() -> {
             settingsDao.update(settings);

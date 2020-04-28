@@ -29,7 +29,9 @@ public abstract class SettingsDatabase extends RoomDatabase {
             super.onCreate(db);
             databaseWriteExecutor.execute(() -> {
                 SettingsDao dao = INSTANCE.settingsDao();
-                dao.insert(new MySettings());
+                MySettings settings = new MySettings();
+                settings.setId(0);
+                dao.insert(settings);
             });
         }
     };
