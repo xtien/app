@@ -44,9 +44,3 @@ f
 6app/src/main/java/nl/christine/app/db/AppDatabase.java,0/f/0fe73cef88233c24385aa6ef5b72bb2981a3b8dd
 e
 5app/src/main/java/nl/christine/app/MyApplication.java,a/a/aac49f252f24bd353135c6c8e0cde6754da655a1
-i
-9app/src/main/java/nl/christine/app/db/SettingsModule.java,f/b/fb2ee2918c2f9f975e1158b46b1e4362ff438312
-k
-;app/src/main/java/nl/christine/app/MyApplicationModule.java,7/1/71ac4469bffc77b33af9925f6a628d090fa59a11
-f
-6app/src/main/java/nl/christine/app/MyAppComponent.java,4/d/4d9e14313d09adfc4990985a04c063f384c95761

@@ -4,17 +4,17 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity
+@Entity(tableName = "settings_table")
 public class MySettings {
 
     @PrimaryKey
     private int id;
 
     @ColumnInfo(name = "peripheral")
-    private boolean isPeripheral;
+    private boolean isPeripheral = false;
 
     @ColumnInfo(name = "discovering")
-    private boolean isDiscovering;
+    private boolean isDiscovering = false;
 
     public boolean isPeripheral() {
         return isPeripheral;

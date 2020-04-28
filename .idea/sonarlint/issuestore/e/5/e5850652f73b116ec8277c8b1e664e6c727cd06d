@@ -1,35 +1,33 @@
 
-F
-java:S10684")Remove this unused "bound" private field.(¶Şªì8úŒ¯ßš.
-o
-java:S3776S"RRefactor this method to reduce its Cognitive Complexity from 23 to the 15 allowed.(Ö‰ü¼8úŒ¯ßš.
-Q
-java:S1066s"/Merge this if statement with the enclosing one.( á»üøÿÿÿÿ8úŒ¯ßš.
 ‚
-java:S1450:"`Remove the "settingsViewModel" field and declare it as a local variable in the relevant methods.(Œê½ßúÿÿÿÿ8úŒ¯ßš.
-
-java:S1186_"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ãÜ›Ø8úŒ¯ßš.
-I
-java:S1481V"'Remove this unused "db" local variable.(ÿ´€–ÿÿÿÿÿ8úŒ¯ßš.
+java:S14507"`Remove the "settingsViewModel" field and declare it as a local variable in the relevant methods.(Œê½ßúÿÿÿÿ8»¦ÑÙ›.
 
-java:S14508"]Remove the "peripheralText" field and declare it as a local variable in the relevant methods.(ÀªÄæşÿÿÿÿ8úŒ¯ßš.
+java:S14505"]Remove the "peripheralText" field and declare it as a local variable in the relevant methods.(ÀªÄæşÿÿÿÿ8úŒ¯ßš.
 
-java:S1186g"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ãÜ›Ø8úŒ¯ßš.
-V
-java:S10683"4Remove this unused "bluetoothService" private field.(ªÕÚúÿÿÿÿ8Øì¾›š.
-X
-java:S1854V"6Remove this useless assignment to local variable "db".(ÿ´€–ÿÿÿÿÿ8§Ö®ßš.
-Ÿ
-java:S1186¢"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ğÂ¤8úŒ¯ßš.
+java:S1186a"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ãÜ›Ø8úŒ¯ßš.
 M
-java:S10686"0Remove this unused "discoverText" private field.(—Íœ8úŒ¯ßš.
+java:S10683"0Remove this unused "discoverText" private field.(—Íœ8úŒ¯ßš.
 9
-java:S3626¸"Remove this redundant jump.(ûÁİ…8úŒ¯ßš.
-^
-java:S1128$"<Remove this unused import 'dagger.android.AndroidInjection'.(Éô™”şÿÿÿÿ8×ÈíŒ›.
-x
-java:S14506"[Remove the "discoverText" field and declare it as a local variable in the relevant methods.(—Íœ8úŒ¯ßš.
+java:S3626²"Remove this redundant jump.(ûÁİ…8úŒ¯ßš.
+V
+java:S10680"4Remove this unused "bluetoothService" private field.(ªÕÚúÿÿÿÿ8Øì¾›š.
+R
+java:S1481Q"0Remove this unused "settingsDao" local variable.(Ê»Éüÿÿÿÿ8ÃÓÙ›.
+a
+java:S1854Q"?Remove this useless assignment to local variable "settingsDao".(Ê»Éüÿÿÿÿ8ÃÓÙ›.
 T
-java:S10688"2Remove this unused "peripheralText" private field.(ÀªÄæşÿÿÿÿ8úŒ¯ßš.
+java:S10685"2Remove this unused "peripheralText" private field.(ÀªÄæşÿÿÿÿ8úŒ¯ßš.
+x
+java:S14503"[Remove the "discoverText" field and declare it as a local variable in the relevant methods.(—Íœ8úŒ¯ßš.
+o
+java:S3776M"RRefactor this method to reduce its Cognitive Complexity from 23 to the 15 allowed.(Ö‰ü¼8úŒ¯ßš.
+F
+java:S10681")Remove this unused "bound" private field.(¶Şªì8úŒ¯ßš.
+Q
+java:S1066m"/Merge this if statement with the enclosing one.( á»üøÿÿÿÿ8úŒ¯ßš.
+
+java:S1186Y"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ãÜ›Ø8úŒ¯ßš.
 Ÿ
-java:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ğÂ¤8úŒ¯ßš.
+java:S1186‡"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ğÂ¤8úŒ¯ßš.
+Ÿ
+java:S1186œ"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ğÂ¤8úŒ¯ßš.

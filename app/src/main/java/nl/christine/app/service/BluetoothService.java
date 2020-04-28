@@ -5,10 +5,8 @@ import android.bluetooth.*;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
@@ -20,9 +18,6 @@ import nl.christine.app.MainActivity;
 import nl.christine.app.R;
 
 import java.util.List;
-import java.util.UUID;
-
-import static android.bluetooth.BluetoothAdapter.STATE_CONNECTED;
 
 /**
  * BluetoothService does everything bluetooth. It switches on at phone startup, starts discovery,
@@ -59,6 +54,8 @@ public class BluetoothService extends Service {
     public final static String EXTRA_DATA =
             "com.example.bluetooth.le.EXTRA_DATA";
 
+    private BluetoothLeScanner scanner;
+
     public class LocalBinder extends Binder {
         public BluetoothService getService() {
             return BluetoothService.this;
@@ -68,8 +65,7 @@ public class BluetoothService extends Service {
     private final BluetoothGattCallback gattCallback =
             new BluetoothGattCallback() {
                 @Override
-                public void onConnectionStateChange(BluetoothGatt gatt, int status,
-                                                    int newState) {
+                public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
                     String intentAction;
                     if (newState == BluetoothProfile.STATE_CONNECTED) {
                         intentAction = ACTION_GATT_CONNECTED;
@@ -124,6 +120,12 @@ public class BluetoothService extends Service {
         notfManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         createNotificationChannel();
         showPermanentNotification(R.string.local_service_started);
+        final BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        bluetoothAdapter = bluetoothManager.getAdapter();
+        if (!bluetoothAdapter.isEnabled()) {
+            Log.d(LOGTAG, "bluetoothadapter not enabled");
+        }
+        scanner = bluetoothAdapter.getBluetoothLeScanner();
 
         scanLeDevice(true);
     }
@@ -135,15 +137,15 @@ public class BluetoothService extends Service {
                 @Override
                 public void run() {
                     scanning = false;
-                    bluetoothAdapter.getBluetoothLeScanner().stopScan(leScanCallback);
+                    scanner.stopScan(leScanCallback);
                 }
             }, SCAN_PERIOD);
 
             scanning = true;
-            bluetoothAdapter.getBluetoothLeScanner().startScan(leScanCallback);
+            scanner.startScan(leScanCallback);
         } else {
             scanning = false;
-            bluetoothAdapter.getBluetoothLeScanner().stopScan(leScanCallback);
+            scanner.stopScan(leScanCallback);
         }
     }
 
@@ -160,7 +162,6 @@ public class BluetoothService extends Service {
 
         // Tell the user we stopped.
         Toast.makeText(this, R.string.local_service_stopped, Toast.LENGTH_SHORT).show();
-        unregisterReceiver(receiver);
         bluetoothAdapter.cancelDiscovery();
     }
 
@@ -194,18 +195,6 @@ public class BluetoothService extends Service {
         // Send the notification.
         notfManager.notify(text, notification);
     }
-
-    private final BroadcastReceiver receiver = new BroadcastReceiver() {
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                String deviceName = device.getName();
-                String deviceHardwareAddress = device.getAddress(); // MAC address
-                Log.d(LOGTAG, "devicename " + deviceName + " HWaddress " + deviceHardwareAddress);
-            }
-        }
-    };
 
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

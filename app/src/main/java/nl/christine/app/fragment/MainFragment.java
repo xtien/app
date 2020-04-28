@@ -26,16 +26,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.room.Room;
 import nl.christine.app.R;
-import nl.christine.app.dao.SettingsDao;
-import nl.christine.app.db.AppDatabase;
+import nl.christine.app.model.MySettings;
 import nl.christine.app.service.BluetoothService;
 import nl.christine.app.viewmodel.SettingsViewModel;
-import dagger.android.AndroidInjection;
-
-import javax.inject.Inject;
 
 /**
  * MainFragment contains the main controls of the app. These would include the controls a user in the production
@@ -56,9 +53,6 @@ public class MainFragment extends Fragment {
     private TextView peripheralText;
 
     private SettingsViewModel settingsViewModel;
-
-    @Inject
-    public SettingsDao settingsDao;
 
     public static MainFragment newInstance() {
         return new MainFragment();
@@ -83,27 +77,15 @@ public class MainFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        AppDatabase db = Room.databaseBuilder(getActivity().getApplicationContext(),
-                AppDatabase.class, "settings-db").build();
-
         settingsViewModel = ViewModelProviders.of(this).get(SettingsViewModel.class);
-        settingsViewModel.loadSettings();
-
-        discoverSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-            }
+        settingsViewModel.getSettings().observe(getActivity(), settings -> {
+            discoverSwitch.setChecked(settings.isDiscovering());
+            peripheralSwitch.setChecked(settings.isPeripheral());
         });
 
-        peripheralSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        discoverSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> settingsViewModel.setDiscovering(isChecked));
 
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-            }
-        });
+        peripheralSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> settingsViewModel.setPeripheral(isChecked));
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         switchBTOn();

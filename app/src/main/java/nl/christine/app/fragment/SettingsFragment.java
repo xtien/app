@@ -17,7 +17,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import nl.christine.app.R;
 import nl.christine.app.viewmodel.SettingsViewModel;
-import nl.christine.app.viewmodel.TraceViewModel;
 
 /**
  * Settingsfragment contains the settings of the app other than debug settings or settings that

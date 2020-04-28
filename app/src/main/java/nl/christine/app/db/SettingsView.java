@@ -9,7 +9,7 @@ package nl.christine.app.db;
 
 import androidx.room.DatabaseView;
 
-@DatabaseView("SELECT id, peripheral, discovering FROM mysettings ")
+@DatabaseView("SELECT id, peripheral, discovering FROM settings_table ")
 public class SettingsView {
 
     public boolean discovering;

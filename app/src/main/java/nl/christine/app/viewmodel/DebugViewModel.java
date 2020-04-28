@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import nl.christine.app.model.MyDebug;
-import nl.christine.app.model.MyTrace;
 
 public class DebugViewModel extends ViewModel {
 
