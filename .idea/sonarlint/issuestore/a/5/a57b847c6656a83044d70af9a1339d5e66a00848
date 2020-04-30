@@ -1,18 +1,0 @@
-
-]
-java:S3398Ç"?Move this method into the anonymous class declared at line 173.(àëÓ¸8ıÓİ×œ.
-x	java:S116 "WRename this field "NOTIFICATION" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÎšÅÉÿÿÿÿÿ8ùî³™š.
-F
-java:S1481¾"(Remove this unused "map" local variable.(İ’¦8ä³×œ.
-r	java:S116"QRename this field "LOGTAG" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ñ€– øÿÿÿÿ8İ¾Ø´š.
-s	java:S117à"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(®¼†úÿÿÿÿ8æ¸³Óœ.
-H
-java:S1068#"+Remove this unused "handler" private field.(ïóî‘8©”Ùœ.
-O
-java:S1144Ù"1Remove this unused private "stopScanning" method.(Êçø 8°”Ï×œ.
-U
-java:S2589ã"7Remove this expression which always evaluates to "true"(¦çÀâ8æ¸³Óœ.
-U
-java:S1854¾"7Remove this useless assignment to local variable "map".(İ’¦8ä³×œ.
-o
-java:S3776G"RRefactor this method to reduce its Cognitive Complexity from 21 to the 15 allowed.(Î¢È8—ê§«œ.

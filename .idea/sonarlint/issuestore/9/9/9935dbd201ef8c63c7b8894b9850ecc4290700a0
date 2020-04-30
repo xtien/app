@@ -1,15 +1,0 @@
-
-M
-java:S1068 "0Remove this unused "helpTextView" private field.(Žº”¥8É¥ºÞœ.
-x
-java:S1450 "[Remove the "helpTextView" field and declare it as a local variable in the relevant methods.(Žº”¥8†ÔºÞœ.
-E
-java:S11853"(Remove this method to simply inherit it.(Ö‰ü¼8”â×Þœ.
-Q
-java:S1068"4Remove this unused "bluetoothAdapter" private field.(ÞÉ×¶8”â×Þœ.
-a
-java:S1068"DRemove this unused "PERMISSION_REQUEST_FINE_LOCATION" private field.(¡î¾Ÿ8”â×Þœ.
-l
-java:S1068"JRemove this unused "PERMISSION_REQUEST_BACKGROUND_LOCATION" private field.(‚ôêãúÿÿÿÿ8”â×Þœ.
-R
-java:S1068"5Remove this unused "REQUEST_ENABLE_BT" private field.(Á÷’Í8”â×Þœ.
