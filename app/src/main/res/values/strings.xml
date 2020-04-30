@@ -11,4 +11,5 @@
     <string name="no_bluetooth">Device doesn\'t support bluetooth</string>
     <string name="channel_name">notf_channel</string>
     <string name="channel_description">Default notf channel</string>
+    <string name="clear">Clear list</string>
 </resources>

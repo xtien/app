@@ -30,10 +30,9 @@ public class MainActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.viewpager);
         pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         pagerAdapter.addFragment(MainFragment.newInstance());
-        pagerAdapter.addFragment(DebugFragment.newInstance());
-        pagerAdapter.addFragment(TraceFragment.newInstance());
-        pagerAdapter.addFragment(SettingsFragment.newInstance());
+        //pagerAdapter.addFragment(DebugFragment.newInstance());
+        //pagerAdapter.addFragment(TraceFragment.newInstance());
+       // pagerAdapter.addFragment(SettingsFragment.newInstance());
         viewPager.setAdapter(pagerAdapter);
-
     }
 }

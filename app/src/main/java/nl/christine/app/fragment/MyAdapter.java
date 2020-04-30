@@ -47,6 +47,11 @@ public class MyAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         return messages.size();
     }
 
+    public void clear() {
+        messages.clear();
+        notifyDataSetChanged();
+    }
+
     private class ViewHolder extends BaseViewHolder {
 
         TextView messageView;

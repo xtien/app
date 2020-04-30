@@ -70,6 +70,7 @@ public class MainFragment extends Fragment {
             listView.smoothScrollToPosition(adapter.getItemCount() - 1);
         }
     };
+    private View clearButton;
 
     public static MainFragment newInstance() {
         return new MainFragment();
@@ -90,6 +91,7 @@ public class MainFragment extends Fragment {
         peripheralSwitch = view.findViewById(R.id.peripheral_switch);
         peripheralText = view.findViewById(R.id.peripheral_text);
         listView = view.findViewById(R.id.listview);
+        clearButton = view.findViewById(R.id.clear);
     }
 
     @Override
@@ -99,16 +101,23 @@ public class MainFragment extends Fragment {
         SharedPreferences prefs = getActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
         uuidView.setText(prefs.getString("uuid", ""));
 
-
         adapter = new MyAdapter();
         layoutManager = new LinearLayoutManager(getActivity());
         listView.setLayoutManager(layoutManager);
         listView.setAdapter(adapter);
 
+        clearButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                adapter.clear();
+            }
+        });
+
         settingsViewModel = ViewModelProviders.of(this).get(SettingsViewModel.class);
         settingsViewModel.getSettings().observe(getActivity(), settings -> {
-            discoverSwitch.setChecked(settings.isDiscovering());
-            peripheralSwitch.setChecked(settings.isPeripheral());
+            discoverSwitch.setChecked(settings != null && settings.isDiscovering());
+            peripheralSwitch.setChecked(settings != null && settings.isPeripheral());
         });
 
         discoverSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> settingsViewModel.setDiscovering(isChecked));
@@ -186,14 +195,19 @@ public class MainFragment extends Fragment {
             doService();
         }
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
         IntentFilter filter = new IntentFilter("nl.christine.app.message");
         filter.addAction("nl.christine.app.message");
         getActivity().registerReceiver(receiver, filter);
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onStop() {
+        super.onStop();
         getActivity().unregisterReceiver(receiver);
     }
 

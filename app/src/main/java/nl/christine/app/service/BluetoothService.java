@@ -14,8 +14,10 @@ import androidx.lifecycle.Observer;
 import nl.christine.app.MainActivity;
 import nl.christine.app.R;
 import nl.christine.app.db.SettingsRepository;
+import nl.christine.app.model.Contact;
 import nl.christine.app.model.MySettings;
 
+import java.io.ObjectOutputStream;
 import java.nio.charset.Charset;
 import java.util.*;
 
@@ -38,37 +40,18 @@ public class BluetoothService extends Service {
     private BluetoothAdapter bluetoothAdapter;
     private Handler handler = new Handler();
     private boolean scanning = false;
-    private static final long SCAN_PERIOD = 10000;
-    private String serviceUUID = "00001810-0000-1000-8000-00805f9b34fb";
-
-
-    private String bluetoothDeviceAddress;
-    private int connectionState = STATE_DISCONNECTED;
-
-    private static final int STATE_DISCONNECTED = 0;
-    private static final int STATE_CONNECTING = 1;
-    private static final int STATE_CONNECTED = 2;
-
-    public final static String ACTION_GATT_CONNECTED =
-            "com.example.bluetooth.le.ACTION_GATT_CONNECTED";
-    public final static String ACTION_GATT_DISCONNECTED =
-            "com.example.bluetooth.le.ACTION_GATT_DISCONNECTED";
-    public final static String ACTION_GATT_SERVICES_DISCOVERED =
-            "com.example.bluetooth.le.ACTION_GATT_SERVICES_DISCOVERED";
-    public final static String ACTION_DATA_AVAILABLE =
-            "com.example.bluetooth.le.ACTION_DATA_AVAILABLE";
-    public final static String EXTRA_DATA =
-            "com.example.bluetooth.le.EXTRA_DATA";
+    private String uuidString = null;
+    private String serviceUUIDString = "00001810-0000-1000-8000-00805f9b34fb";
+    private String serviceDataUUIDString = "00002a00-0000-1000-8000-00805f9b34fb";
 
     private BluetoothLeScanner scanner;
     private SettingsRepository repository;
     private Observer<MySettings> observer;
-    private ScanSettings scanSettings;
 
     private Queue<Runnable> commandQueue = new LinkedList<>();
     private boolean commandQueueBusy = false;
-    private int nrTries = 0;
-    private boolean isRetrying = false;
+    private boolean advertising = false;
+    private Map<String, Contact> contacts = new HashMap<>();
 
     public class LocalBinder extends Binder {
         public BluetoothService getService() {
@@ -97,7 +80,7 @@ public class BluetoothService extends Service {
                                         Log.d(LOGTAG, String.format(Locale.ENGLISH, "discovering services of '%s' with delay of %d ms", device.getName(), delay));
                                         boolean result = gatt.discoverServices();
                                         if (!result) {
-                                            Log.e(LOGTAG, "discoverServices failed to start");
+                                            log(LOGTAG, "discoverServices failed to start");
                                         }
                                     };
                                     handler.postDelayed(discoverServicesRunnable, delay);
@@ -107,7 +90,6 @@ public class BluetoothService extends Service {
                                     break;
                             }
 
-                            connectionState = STATE_CONNECTED;
                             log(LOGTAG, "Connected to GATT server.");
                             handler.postDelayed(new Runnable() {
                                 @Override
@@ -123,18 +105,12 @@ public class BluetoothService extends Service {
                             break;
 
                         case BluetoothProfile.STATE_CONNECTING:
-                            connectionState = STATE_DISCONNECTED;
-                            //log(LOGTAG, "Connecting to GATT server.");
                             break;
 
                         case BluetoothProfile.STATE_DISCONNECTING:
-                            connectionState = STATE_DISCONNECTED;
-                            //log(LOGTAG, "Disconnecting from GATT server.");
                             break;
 
                         case BluetoothProfile.STATE_DISCONNECTED:
-                            connectionState = STATE_DISCONNECTED;
-                            //log(LOGTAG, "Disconnected from GATT server.");
                             gatt.close();
                             break;
                     }
@@ -157,8 +133,23 @@ public class BluetoothService extends Service {
             log(LOGTAG, "onServicesDiscovered: " + status);
             if (status == GATT_SUCCESS) {
                 log(LOGTAG, "gatt connect " + status);
-                gatt.connect();
 
+                List<BluetoothGattService> services = gatt.getServices();
+                log(LOGTAG, "getServices " + (services != null ? services.size() : "null"));
+                if (services != null && services.size() > 0) {
+                    for (BluetoothGattService service : services) {
+                        log(LOGTAG, "service: " + service.getUuid() + " " + service.getType());
+                        if (service.getCharacteristics() != null && service.getCharacteristics().size() > 0) {
+                            for (BluetoothGattCharacteristic characteristic : service.getCharacteristics()) {
+                                log(LOGTAG, "characteristic: " + characteristic.getUuid().toString());
+                                boolean c = readCharacteristic(gatt, characteristic);
+                            }
+                        }
+                    }
+                }
+
+            } else {
+                gatt.disconnect();
             }
         }
 
@@ -168,9 +159,8 @@ public class BluetoothService extends Service {
                                          BluetoothGattCharacteristic characteristic,
                                          int status) {
             if (status == GATT_SUCCESS) {
-                log(LOGTAG, "onCharacteristicRead received: " + status);
-
-                // process
+                String value = characteristic.getStringValue(0);
+                log(LOGTAG, "onCharacteristicRead: " + " " + value);
 
             } else {
                 log(LOGTAG, String.format(Locale.ENGLISH, "ERROR: Read failed for characteristic: %s, status %d", characteristic.getUuid(), status));
@@ -179,77 +169,57 @@ public class BluetoothService extends Service {
         }
     };
 
+    AdvertiseCallback advertisingCallback = new AdvertiseCallback() {
+
+        @Override
+        public void onStartSuccess(AdvertiseSettings settingsInEffect) {
+            super.onStartSuccess(settingsInEffect);
+            log(LOGTAG, "advertising onStartSuccess " + uuidString);
+        }
+
+        @Override
+        public void onStartFailure(int errorCode) {
+            super.onStartFailure(errorCode);
+            log("BLE", "Advertising onStartFailure: " + errorCode);
+        }
+    };
+
     @Override
     public void onCreate() {
 
         // https://medium.com/@martijn.van.welie/making-android-ble-work-part-1-a736dcd53b02
 
-        scanSettings = new ScanSettings.Builder()
-                .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
-                .setCallbackType(ScanSettings.CALLBACK_TYPE_FIRST_MATCH)
-                .setMatchMode(ScanSettings.MATCH_MODE_AGGRESSIVE)
-                .setNumOfMatches(ScanSettings.MATCH_NUM_ONE_ADVERTISEMENT)
-                .setReportDelay(0L)
-                .build();
+        SharedPreferences prefs = getSharedPreferences("prefs", Context.MODE_PRIVATE);
+        uuidString = prefs.getString("uuid", null);
+        if (uuidString == null) {
+            uuidString = UUID.randomUUID().toString();
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("uuid", uuidString);
+            editor.commit();
+        }
 
         repository = new SettingsRepository(getApplication());
 
-        observer = new Observer<MySettings>() {
+        observer = settings -> {
 
-            @Override
-            public void onChanged(MySettings settings) {
-                if (settings.isDiscovering()) {
-                    if (!scanning) {
-                        scanLeDevice(true);
-                    }
-                } else {
-                    if (scanning) {
-                        scanLeDevice(false);
-                    }
+            if (settings.isDiscovering()) {
+                if (!scanning) {
+                    scanLeDevice(true);
                 }
-
-                if (settings.isPeripheral()) {
-                    BluetoothLeAdvertiser advertiser = BluetoothAdapter.getDefaultAdapter().getBluetoothLeAdvertiser();
-
-                    AdvertiseSettings advertiseSettings = new AdvertiseSettings.Builder()
-                            .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
-                            .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH)
-                            .setConnectable(true)
-                            .build();
-
-                    SharedPreferences prefs = getSharedPreferences("prefs", Context.MODE_PRIVATE);
-                    String uuidString = prefs.getString("uuid", null);
-                    if (uuidString == null) {
-                        uuidString = UUID.randomUUID().toString();
-                        SharedPreferences.Editor editor = prefs.edit();
-                        editor.putString("uuid", uuidString);
-                        editor.commit();
-                    }
-
-                    ParcelUuid uuid = new ParcelUuid(UUID.fromString(uuidString));
-                    AdvertiseData data = new AdvertiseData.Builder()
-                            .setIncludeDeviceName(false)
-                            .addServiceUuid(uuid)
-                            //.addServiceData(uuid, "Data".getBytes(Charset.forName("UTF-8")))
-                            .build();
-
-                    AdvertiseCallback advertisingCallback = new AdvertiseCallback() {
-
-                        @Override
-                        public void onStartSuccess(AdvertiseSettings settingsInEffect) {
-                            super.onStartSuccess(settingsInEffect);
-                        }
-
-                        @Override
-                        public void onStartFailure(int errorCode) {
-                            log("BLE", "Advertising onStartFailure: " + errorCode);
-                            super.onStartFailure(errorCode);
-                        }
-                    };
-
-                    advertiser.startAdvertising(advertiseSettings, data, advertisingCallback);
+            } else {
+                if (scanning) {
+                    scanLeDevice(false);
                 }
+            }
 
+            if (settings.isPeripheral()) {
+                if (!advertising) {
+                    advertise();
+                }
+            } else {
+                if (advertising) {
+                    stopAdvertising();
+                }
             }
         };
 
@@ -264,8 +234,39 @@ public class BluetoothService extends Service {
             log(LOGTAG, "bluetoothadapter not enabled");
         }
         scanner = bluetoothAdapter.getBluetoothLeScanner();
+    }
 
-        scanLeDevice(true);
+    private void stopAdvertising() {
+        BluetoothLeAdvertiser advertiser = BluetoothAdapter.getDefaultAdapter().getBluetoothLeAdvertiser();
+        advertiser.stopAdvertising(advertisingCallback);
+        advertising = false;
+    }
+
+    private void advertise() {
+        advertising = true;
+        BluetoothLeAdvertiser advertiser = BluetoothAdapter.getDefaultAdapter().getBluetoothLeAdvertiser();
+
+        AdvertiseSettings advertiseSettings = new AdvertiseSettings.Builder()
+                .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
+                .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH)
+                .setConnectable(true)
+                .setTimeout(180000)
+                .build();
+
+        ParcelUuid uuid = new ParcelUuid(UUID.fromString(uuidString));
+        ParcelUuid serviceUUID = new ParcelUuid(UUID.fromString(serviceUUIDString));
+        ParcelUuid serviceDataUUID = new ParcelUuid(UUID.fromString(serviceDataUUIDString));
+        byte[] d = {0x23, 0x23};
+
+        AdvertiseData data = new AdvertiseData.Builder()
+                .setIncludeDeviceName(false)
+                .setIncludeTxPowerLevel(true)
+                .addServiceUuid(serviceUUID)
+                .addServiceData(serviceDataUUID, uuidString.replace("-", "").substring(0, 17).getBytes())
+                .build();
+
+        advertiser.startAdvertising(advertiseSettings, data, advertisingCallback);
+
     }
 
     private void log(String logtag, String message) {
@@ -289,18 +290,42 @@ public class BluetoothService extends Service {
                 @Override
                 public void onScanResult(int callbackType, ScanResult result) {
 
-                    stopScanning();
+                    ScanRecord scanRecord = result.getScanRecord();
 
-                    Map<ParcelUuid, byte[]> data = result.getScanRecord().getServiceData();
-                    while (data.keySet().iterator().hasNext()) {
-                        ParcelUuid parcelUuid = data.keySet().iterator().next();
-                        log(LOGTAG, "uuid " + parcelUuid.toString());
+                    if (scanRecord.getDeviceName() != null) {
+                        log(LOGTAG, "BT LE device scan " + scanRecord.getDeviceName());
                     }
 
-                    //log(LOGTAG, "BT LE device " + result.getDevice().getAddress());
-                    result.getDevice().connectGatt(getApplicationContext(), false, gattCallback, TRANSPORT_LE);
+                    Map<ParcelUuid, byte[]> map = result.getScanRecord().getServiceData();
+                    byte[] data = result.getScanRecord().getServiceData(ParcelUuid.fromString(serviceDataUUIDString));
+                    if (data != null) {
+                        String id = new String(data);
+                        displayContact(id, scanRecord.getTxPowerLevel());
+                    }
+
+                    if (scanRecord != null) {
+                        //stopScanning();
+
+                        //log(LOGTAG, "BT LE device " + result.getDevice().getAddress());
+                        //result.getDevice().connectGatt(getApplicationContext(), false, gattCallback, TRANSPORT_LE);
+                    }
                 }
             };
+
+    private void displayContact(String id, int txPowerLevel) {
+
+        Contact existingContact = contacts.get(id);
+        if (existingContact == null) {
+            contacts.put(id, new Contact(id, txPowerLevel, System.currentTimeMillis()));
+            log(LOGTAG, "id: " + id + " power level " + txPowerLevel);
+        } else {
+            if (txPowerLevel > existingContact.getPowerLevel()) {
+                existingContact.setPowerLevel(txPowerLevel);
+                existingContact.plusplus();
+                log(LOGTAG, "id: " + id + " power " + txPowerLevel);
+            }
+        }
+    }
 
     private void stopScanning() {
         scanLeDevice(false);
@@ -309,7 +334,7 @@ public class BluetoothService extends Service {
     private void scanLeDevice(final boolean enable) {
         if (enable) {
 
-            UUID BLP_SERVICE_UUID = UUID.fromString(serviceUUID);
+            UUID BLP_SERVICE_UUID = UUID.fromString(serviceUUIDString);
             UUID[] serviceUUIDs = new UUID[]{BLP_SERVICE_UUID};
             List<ScanFilter> filters = null;
             if (serviceUUIDs != null) {
@@ -322,8 +347,9 @@ public class BluetoothService extends Service {
                 }
             }
 
+            scanner.flushPendingScanResults(leScanCallback);
             scanning = true;
-            scanner.startScan(filters, scanSettings, leScanCallback);
+            scanner.startScan(leScanCallback);
 
         } else {
             scanning = false;
@@ -408,16 +434,12 @@ public class BluetoothService extends Service {
         }
 
         // Enqueue the read command now that all checks have been passed
-        boolean result = commandQueue.add(new Runnable() {
-            @Override
-            public void run() {
-                if (!bluetoothGatt.readCharacteristic(characteristic)) {
-                    Log.e(LOGTAG, String.format("ERROR: readCharacteristic failed for characteristic: %s", characteristic.getUuid()));
-                    completedCommand(bluetoothGatt);
-                } else {
-                    Log.d(LOGTAG, String.format("reading characteristic <%s>", characteristic.getUuid()));
-                    nrTries++;
-                }
+        boolean result = commandQueue.add(() -> {
+            if (!bluetoothGatt.readCharacteristic(characteristic)) {
+                Log.e(LOGTAG, String.format("ERROR: readCharacteristic failed for characteristic: %s", characteristic.getUuid()));
+                completedCommand(bluetoothGatt);
+            } else {
+                Log.d(LOGTAG, String.format("reading characteristic <%s>", characteristic.getUuid()));
             }
         });
 
@@ -447,7 +469,6 @@ public class BluetoothService extends Service {
         if (commandQueue.size() > 0) {
             final Runnable bluetoothCommand = commandQueue.peek();
             commandQueueBusy = true;
-            nrTries = 0;
 
             handler.post(new Runnable() {
                 @Override
@@ -464,7 +485,6 @@ public class BluetoothService extends Service {
 
     private void completedCommand(BluetoothGatt bluetoothGatt) {
         commandQueueBusy = false;
-        isRetrying = false;
         commandQueue.poll();
         nextCommand(bluetoothGatt);
     }

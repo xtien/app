@@ -22,6 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Main"
+            android:visibility="gone"
             style="@style/title"
             />
     <TextView
@@ -31,6 +32,12 @@
             android:text="Main"
             style="@style/text"
             />
+
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/clear"
+            android:id="@+id/clear" />
 
     <TextView
             android:id="@+id/error_message"
