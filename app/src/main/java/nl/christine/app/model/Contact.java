@@ -7,25 +7,42 @@
 
 package nl.christine.app.model;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "contact_table")
 public class Contact {
 
-    private String id;
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
+    @ColumnInfo(name = "contactId")
+    private String contactId;
+    @ColumnInfo(name = "powerLevel")
     private int powerLevel;
+    @ColumnInfo(name = "number")
     private int number;
+    @ColumnInfo(name = "time")
     private long time;
 
-    public Contact(String id, int txPowerLevel, long currentTimeMillis) {
-        this.id = id;
+    public Contact() {
+
+    }
+
+    public Contact(String contactId, int txPowerLevel, long currentTimeMillis) {
+        this.contactId = contactId;
         this.powerLevel = txPowerLevel;
-        this.time =currentTimeMillis;
+        this.time = currentTimeMillis;
+        this.number = 1;
     }
 
-    public String getId() {
-        return id;
+    public String getContactId() {
+        return contactId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setContactId(String contactId) {
+        this.contactId = contactId;
     }
 
     public int getPowerLevel() {
@@ -54,5 +71,21 @@ public class Contact {
 
     public void plusplus() {
         number++;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getNumberString() {
+        return String.valueOf(number);
+    }
+
+    public String getPowerLevelString() {
+        return String.valueOf(powerLevel);
     }
 }

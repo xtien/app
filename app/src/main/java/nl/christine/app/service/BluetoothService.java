@@ -13,18 +13,12 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
 import nl.christine.app.MainActivity;
 import nl.christine.app.R;
+import nl.christine.app.db.ContactRepository;
 import nl.christine.app.db.SettingsRepository;
 import nl.christine.app.model.Contact;
 import nl.christine.app.model.MySettings;
 
-import java.io.ObjectOutputStream;
-import java.nio.charset.Charset;
 import java.util.*;
-
-import static android.bluetooth.BluetoothDevice.*;
-import static android.bluetooth.BluetoothGatt.GATT_FAILURE;
-import static android.bluetooth.BluetoothGatt.GATT_SUCCESS;
-import static android.bluetooth.BluetoothGattCharacteristic.PROPERTY_READ;
 
 /**
  * BluetoothService does everything bluetooth. It switches on at phone startup, starts discovery,
@@ -48,126 +42,15 @@ public class BluetoothService extends Service {
     private SettingsRepository repository;
     private Observer<MySettings> observer;
 
-    private Queue<Runnable> commandQueue = new LinkedList<>();
-    private boolean commandQueueBusy = false;
     private boolean advertising = false;
     private Map<String, Contact> contacts = new HashMap<>();
+    private ContactRepository contactRepository;
 
     public class LocalBinder extends Binder {
         public BluetoothService getService() {
             return BluetoothService.this;
         }
     }
-
-    private final BluetoothGattCallback gattCallback = new BluetoothGattCallback() {
-
-        @Override
-        public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
-
-            BluetoothDevice device = gatt.getDevice();
-
-            switch (status) {
-                case GATT_SUCCESS:
-                    switch (newState) {
-                        case BluetoothProfile.STATE_CONNECTED:
-
-                            long delay = 0;
-
-                            switch (device.getBondState()) {
-                                case BOND_NONE:
-                                case BOND_BONDED:
-                                    Runnable discoverServicesRunnable = () -> {
-                                        Log.d(LOGTAG, String.format(Locale.ENGLISH, "discovering services of '%s' with delay of %d ms", device.getName(), delay));
-                                        boolean result = gatt.discoverServices();
-                                        if (!result) {
-                                            log(LOGTAG, "discoverServices failed to start");
-                                        }
-                                    };
-                                    handler.postDelayed(discoverServicesRunnable, delay);
-                                    break;
-
-                                case BOND_BONDING:
-                                    break;
-                            }
-
-                            log(LOGTAG, "Connected to GATT server.");
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (gatt.discoverServices()) {
-
-                                    } else {
-                                        gatt.close();
-                                        scanLeDevice(true);
-                                    }
-                                }
-                            }, 1000);
-                            break;
-
-                        case BluetoothProfile.STATE_CONNECTING:
-                            break;
-
-                        case BluetoothProfile.STATE_DISCONNECTING:
-                            break;
-
-                        case BluetoothProfile.STATE_DISCONNECTED:
-                            gatt.close();
-                            break;
-                    }
-                    break;
-
-                case GATT_FAILURE:
-                    log(LOGTAG, "gatt failure ");
-                    gatt.disconnect();
-                    break;
-
-                default:
-                    log(LOGTAG, "disconnect status " + status);
-                    gatt.disconnect();
-                    break;
-            }
-        }
-
-        @Override
-        public void onServicesDiscovered(BluetoothGatt gatt, int status) {
-            log(LOGTAG, "onServicesDiscovered: " + status);
-            if (status == GATT_SUCCESS) {
-                log(LOGTAG, "gatt connect " + status);
-
-                List<BluetoothGattService> services = gatt.getServices();
-                log(LOGTAG, "getServices " + (services != null ? services.size() : "null"));
-                if (services != null && services.size() > 0) {
-                    for (BluetoothGattService service : services) {
-                        log(LOGTAG, "service: " + service.getUuid() + " " + service.getType());
-                        if (service.getCharacteristics() != null && service.getCharacteristics().size() > 0) {
-                            for (BluetoothGattCharacteristic characteristic : service.getCharacteristics()) {
-                                log(LOGTAG, "characteristic: " + characteristic.getUuid().toString());
-                                boolean c = readCharacteristic(gatt, characteristic);
-                            }
-                        }
-                    }
-                }
-
-            } else {
-                gatt.disconnect();
-            }
-        }
-
-        @Override
-        // Result of a characteristic read operation
-        public void onCharacteristicRead(BluetoothGatt gatt,
-                                         BluetoothGattCharacteristic characteristic,
-                                         int status) {
-            if (status == GATT_SUCCESS) {
-                String value = characteristic.getStringValue(0);
-                log(LOGTAG, "onCharacteristicRead: " + " " + value);
-
-            } else {
-                log(LOGTAG, String.format(Locale.ENGLISH, "ERROR: Read failed for characteristic: %s, status %d", characteristic.getUuid(), status));
-                completedCommand(gatt);
-            }
-        }
-    };
 
     AdvertiseCallback advertisingCallback = new AdvertiseCallback() {
 
@@ -189,6 +72,8 @@ public class BluetoothService extends Service {
 
         // https://medium.com/@martijn.van.welie/making-android-ble-work-part-1-a736dcd53b02
 
+        contactRepository = new ContactRepository(getApplication());
+
         SharedPreferences prefs = getSharedPreferences("prefs", Context.MODE_PRIVATE);
         uuidString = prefs.getString("uuid", null);
         if (uuidString == null) {
@@ -204,21 +89,21 @@ public class BluetoothService extends Service {
 
             if (settings.isDiscovering()) {
                 if (!scanning) {
-                    scanLeDevice(true);
+                    BluetoothService.this.scanLeDevice(true);
                 }
             } else {
                 if (scanning) {
-                    scanLeDevice(false);
+                    BluetoothService.this.scanLeDevice(false);
                 }
             }
 
             if (settings.isPeripheral()) {
                 if (!advertising) {
-                    advertise();
+                    BluetoothService.this.advertise();
                 }
             } else {
                 if (advertising) {
-                    stopAdvertising();
+                    BluetoothService.this.stopAdvertising();
                 }
             }
         };
@@ -227,7 +112,10 @@ public class BluetoothService extends Service {
 
         notfManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         createNotificationChannel();
-        showPermanentNotification(R.string.local_service_started);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            showPermanentNotification(R.string.local_service_started);
+        }
         final BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         bluetoothAdapter = bluetoothManager.getAdapter();
         if (!bluetoothAdapter.isEnabled()) {
@@ -243,8 +131,14 @@ public class BluetoothService extends Service {
     }
 
     private void advertise() {
+        uuidString = getSharedPreferences("prefs", MODE_PRIVATE).getString("uuid", "123");
         advertising = true;
         BluetoothLeAdvertiser advertiser = BluetoothAdapter.getDefaultAdapter().getBluetoothLeAdvertiser();
+
+        if(advertiser == null){
+            log(LOGTAG, "No bluetooth LE advertiser");
+            return;
+        }
 
         AdvertiseSettings advertiseSettings = new AdvertiseSettings.Builder()
                 .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
@@ -253,10 +147,8 @@ public class BluetoothService extends Service {
                 .setTimeout(180000)
                 .build();
 
-        ParcelUuid uuid = new ParcelUuid(UUID.fromString(uuidString));
         ParcelUuid serviceUUID = new ParcelUuid(UUID.fromString(serviceUUIDString));
         ParcelUuid serviceDataUUID = new ParcelUuid(UUID.fromString(serviceDataUUIDString));
-        byte[] d = {0x23, 0x23};
 
         AdvertiseData data = new AdvertiseData.Builder()
                 .setIncludeDeviceName(false)
@@ -266,7 +158,6 @@ public class BluetoothService extends Service {
                 .build();
 
         advertiser.startAdvertising(advertiseSettings, data, advertisingCallback);
-
     }
 
     private void log(String logtag, String message) {
@@ -302,13 +193,6 @@ public class BluetoothService extends Service {
                         String id = new String(data);
                         displayContact(id, scanRecord.getTxPowerLevel());
                     }
-
-                    if (scanRecord != null) {
-                        //stopScanning();
-
-                        //log(LOGTAG, "BT LE device " + result.getDevice().getAddress());
-                        //result.getDevice().connectGatt(getApplicationContext(), false, gattCallback, TRANSPORT_LE);
-                    }
                 }
             };
 
@@ -316,14 +200,17 @@ public class BluetoothService extends Service {
 
         Contact existingContact = contacts.get(id);
         if (existingContact == null) {
-            contacts.put(id, new Contact(id, txPowerLevel, System.currentTimeMillis()));
+            Contact newContact = new Contact(id, txPowerLevel, System.currentTimeMillis());
+            contactRepository.create(newContact);
+            contacts.put(id, newContact);
             log(LOGTAG, "id: " + id + " power level " + txPowerLevel);
         } else {
+            existingContact.plusplus();
             if (txPowerLevel > existingContact.getPowerLevel()) {
                 existingContact.setPowerLevel(txPowerLevel);
-                existingContact.plusplus();
-                log(LOGTAG, "id: " + id + " power " + txPowerLevel);
+                 log(LOGTAG, "id: " + id + " power " + txPowerLevel);
             }
+            contactRepository.update(existingContact);
         }
     }
 
@@ -375,10 +262,6 @@ public class BluetoothService extends Service {
     }
 
     private void showPermanentNotification(int text) {
-        showTheNotification(text, true);
-    }
-
-    private void showTheNotification(int text, boolean isPermanent) {
 
         Log.d(LOGTAG, getString(text));
         // The PendingIntent to launch our activity if the user selects this notification
@@ -390,7 +273,7 @@ public class BluetoothService extends Service {
                 .setSmallIcon(R.drawable.x10)  // the status icon
                 .setChannelId(CHANNEL_ID)
                 .setTicker("status")  // the status text
-                .setOngoing(isPermanent)
+                .setOngoing(true)
                 .setWhen(System.currentTimeMillis())  // the time stamp
                 .setContentTitle(getText(R.string.local_service_label))  // the label of the entry
                 .setContentText(getString(text))  // the contents of the entry
@@ -413,79 +296,5 @@ public class BluetoothService extends Service {
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
-    }
-
-    public boolean readCharacteristic(final BluetoothGatt bluetoothGatt, final BluetoothGattCharacteristic characteristic) {
-        if (bluetoothGatt == null) {
-            Log.e(LOGTAG, "ERROR: Gatt is 'null', ignoring read request");
-            return false;
-        }
-
-        // Check if characteristic is valid
-        if (characteristic == null) {
-            Log.e(LOGTAG, "ERROR: Characteristic is 'null', ignoring read request");
-            return false;
-        }
-
-        // Check if this characteristic actually has READ property
-        if ((characteristic.getProperties() & PROPERTY_READ) == 0) {
-            Log.e(LOGTAG, "ERROR: Characteristic cannot be read");
-            return false;
-        }
-
-        // Enqueue the read command now that all checks have been passed
-        boolean result = commandQueue.add(() -> {
-            if (!bluetoothGatt.readCharacteristic(characteristic)) {
-                Log.e(LOGTAG, String.format("ERROR: readCharacteristic failed for characteristic: %s", characteristic.getUuid()));
-                completedCommand(bluetoothGatt);
-            } else {
-                Log.d(LOGTAG, String.format("reading characteristic <%s>", characteristic.getUuid()));
-            }
-        });
-
-        if (result) {
-            nextCommand(bluetoothGatt);
-        } else {
-            Log.e(LOGTAG, "ERROR: Could not enqueue read characteristic command");
-        }
-        return result;
-    }
-
-    private void nextCommand(BluetoothGatt bluetoothGatt) {
-
-        if (commandQueueBusy) {
-            return;
-        }
-
-        // Check if we still have a valid gatt object
-        if (bluetoothGatt == null) {
-            Log.e(LOGTAG, String.format("ERROR: GATT is 'null' for peripheral '%s', clearing command queue", bluetoothGatt.getDevice().getAddress()));
-            commandQueue.clear();
-            commandQueueBusy = false;
-            return;
-        }
-
-        // Execute the next command in the queue
-        if (commandQueue.size() > 0) {
-            final Runnable bluetoothCommand = commandQueue.peek();
-            commandQueueBusy = true;
-
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        bluetoothCommand.run();
-                    } catch (Exception ex) {
-                        Log.e(LOGTAG, String.format("ERROR: Command exception for device '%s'", bluetoothGatt.getDevice().getName()), ex);
-                    }
-                }
-            });
-        }
-    }
-
-    private void completedCommand(BluetoothGatt bluetoothGatt) {
-        commandQueueBusy = false;
-        commandQueue.poll();
-        nextCommand(bluetoothGatt);
     }
 }

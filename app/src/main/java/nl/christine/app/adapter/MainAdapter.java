@@ -5,7 +5,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0.
  */
 
-package nl.christine.app.fragment;
+package nl.christine.app.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,11 +15,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import nl.christine.app.R;
+import nl.christine.app.fragment.BaseViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyAdapter extends RecyclerView.Adapter<BaseViewHolder> {
+public class MainAdapter extends RecyclerView.Adapter<BaseViewHolder> {
 
     List<String> messages = new ArrayList<>();
 

@@ -11,9 +11,8 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 import nl.christine.app.adapter.ScreenSlidePagerAdapter;
-import nl.christine.app.fragment.DebugFragment;
+import nl.christine.app.fragment.HelpFragment;
 import nl.christine.app.fragment.MainFragment;
-import nl.christine.app.fragment.SettingsFragment;
 import nl.christine.app.fragment.TraceFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -30,9 +29,8 @@ public class MainActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.viewpager);
         pagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         pagerAdapter.addFragment(MainFragment.newInstance());
-        //pagerAdapter.addFragment(DebugFragment.newInstance());
-        //pagerAdapter.addFragment(TraceFragment.newInstance());
-       // pagerAdapter.addFragment(SettingsFragment.newInstance());
-        viewPager.setAdapter(pagerAdapter);
+        pagerAdapter.addFragment(TraceFragment.newInstance());
+        pagerAdapter.addFragment(HelpFragment.newInstance());
+         viewPager.setAdapter(pagerAdapter);
     }
 }

@@ -1,0 +1,11 @@
+
+
+java:S14886"bImmediately return this expression instead of assigning it to the temporary variable "viewHolder".(¨¦’8ÜğåÙœ.
+\
+java:S1128"?Remove this unused import 'java.time.format.DateTimeFormatter'.(‰÷÷ª8…¼“Úœ.
+P
+java:S1128".Remove this unused import 'java.time.Instant'.(Â‚éñÿÿÿÿÿ8İÊ–Úœ.
+V
+java:S1128"4Remove this unused import 'java.time.LocalDateTime'.(æÃ§ƒüÿÿÿÿ8İÊ–Úœ.
+J
+java:S1128"-Remove this unused import 'java.time.ZoneId'.( Æ½“8İÊ–Úœ.

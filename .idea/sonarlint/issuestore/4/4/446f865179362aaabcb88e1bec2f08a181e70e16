@@ -1,9 +1,0 @@
-
-M
-java:S1135-"2Complete the task associated to this TODO comment.(ûìÿÖøÿÿÿÿ
-J
-java:S1068"-Remove this unused "viewModel" private field.(Û„‡µ8äÀŠ—š.
-u
-java:S1450"XRemove the "viewModel" field and declare it as a local variable in the relevant methods.(Û„‡µ8ÔÖŠ—š.
-c
-java:S1128"FRemove this unused import 'nl.christine.app.viewmodel.TraceViewModel'.(ãî¡›8æøŞš.

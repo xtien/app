@@ -13,43 +13,47 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
+import nl.christine.app.dao.ContactDao;
 import nl.christine.app.dao.SettingsDao;
+import nl.christine.app.model.Contact;
 import nl.christine.app.model.MySettings;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {MySettings.class}, views = {SettingsView.class}, version = 1)
-public abstract class SettingsDatabase extends RoomDatabase {
+@Database(entities = {MySettings.class, Contact.class}, views = {SettingsView.class}, version = 1)
+public abstract class AppDatabase extends RoomDatabase {
 
-    private static Callback settingsDatabaseCallback = new RoomDatabase.Callback() {
+    private static Callback databaseCallback = new RoomDatabase.Callback() {
 
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
             databaseWriteExecutor.execute(() -> {
-                SettingsDao dao = INSTANCE.settingsDao();
+                SettingsDao settingsDao = INSTANCE.settingsDao();
                 MySettings settings = new MySettings();
                 settings.setId(0);
-                dao.insert(settings);
+                settingsDao.insert(settings);
             });
         }
     };
 
     public abstract SettingsDao settingsDao();
 
-    private static volatile SettingsDatabase INSTANCE;
+    public abstract ContactDao contactDao();
+
+    private static volatile AppDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
     static final ExecutorService databaseWriteExecutor =
             Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
-    public static SettingsDatabase getDatabase(final Context context) {
+    public static AppDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
-            synchronized (SettingsDatabase.class) {
+            synchronized (AppDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            SettingsDatabase.class, "word_database")
-                            .addCallback(settingsDatabaseCallback)
+                            AppDatabase.class, "app_database")
+                            .addCallback(databaseCallback)
                             .build();
                 }
             }

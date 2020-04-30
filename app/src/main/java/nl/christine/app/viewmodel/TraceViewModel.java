@@ -1,22 +1,25 @@
 package nl.christine.app.viewmodel;
 
+import android.app.Application;
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-import nl.christine.app.model.MyTrace;
+import nl.christine.app.db.ContactRepository;
+import nl.christine.app.model.Contact;
 
-public class TraceViewModel extends ViewModel {
+import java.util.List;
 
-    private MutableLiveData<MyTrace> trace;
+public class TraceViewModel extends AndroidViewModel {
 
-    public LiveData<MyTrace> getTrace(){
-        if(trace == null){
-            loadTrace();
-        }
-        return trace;
+    private final ContactRepository repository;
+    private final LiveData<List<Contact>> contacts;
+
+    public TraceViewModel(Application application) {
+        super(application);
+        repository = new ContactRepository(application);
+        contacts = repository.getContacts();
     }
 
-    private void loadTrace() {
-
+    public LiveData<List<Contact>> getContacts() {
+        return contacts;
     }
 }

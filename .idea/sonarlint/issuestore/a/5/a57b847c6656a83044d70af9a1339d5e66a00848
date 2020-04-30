@@ -1,65 +1,18 @@
 
-b
-java:S11244"EReorder the modifiers to comply with the Java Language Specification.(ç™Íö8—ê§«œ.
-i
-java:S2259á"KA "NullPointerException" could be thrown; "bluetoothGatt" is nullable here.(Ú¨¡ò8æ¸³Óœ.
-g
-java:S11248"EReorder the modifiers to comply with the Java Language Specification.(Ä’«ùÿÿÿÿ8—ê§«œ.
-U
-java:S2589ã"7Remove this expression which always evaluates to "true"(¦çÀâ8æ¸³Óœ.
 ]
-java:S1117å"?Rename "serviceUUID" which hides the field declared at line 42.(ºôÓÛ8æ¸³Óœ.
-R
-java:S1068B"0Remove this unused "scanSettings" private field.(Ÿ·»Êüÿÿÿÿ8—ê§«œ.
-Y	java:S125…"<This block of commented-out lines of code should be removed.(÷éîã8—ê§«œ.
-{
-java:S1450G"YRemove the "isRetrying" field and declare it as a local variable in the relevant methods.(²ìí‚üÿÿÿÿ8¼ıœ.
-Z
-java:S2589Ê"7Remove this expression which always evaluates to "true"(Øï§Õùÿÿÿÿ8•İÀÓœ.
-}
-java:S1450B"[Remove the "scanSettings" field and declare it as a local variable in the relevant methods.(Ÿ·»Êüÿÿÿÿ8ÿ”£ªœ.
-K
-java:S1481£"-Remove this unused "dataUUID" local variable.(­€¼8ª¾¶«œ.
-Y	java:S125Š"<This block of commented-out lines of code should be removed.(Ìëçª8—ê§«œ.
-=	java:S131^""Add a default case to this switch.(¥ÚÀ8—ê§«œ.
-x	java:S116$"WRename this field "NOTIFICATION" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÎšÅÉÿÿÿÿÿ8ùî³™š.
-g
-java:S1124:"EReorder the modifiers to comply with the Java Language Specification.(âô•ùøÿÿÿÿ8—ê§«œ.
-]
-java:S3398Ù"?Move this method into the anonymous class declared at line 312.(Êçø 8æ¸³Óœ.
-G
-java:S1481É")Remove this unused "data" local variable.(†í½§8öóÃÓœ.
-Z
-java:S1854£"<Remove this useless assignment to local variable "dataUUID".(­€¼8ª¾¶«œ.
-b
-java:S1117Î"?Rename "serviceUUID" which hides the field declared at line 42.(çÆ¾âüÿÿÿÿ8ÉùÖÓœ.
+java:S3398Ç"?Move this method into the anonymous class declared at line 173.(àëÓ¸8ıÓİ×œ.
+x	java:S116 "WRename this field "NOTIFICATION" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÎšÅÉÿÿÿÿÿ8ùî³™š.
 F
-java:S1604Ä"(Make this anonymous inner class a lambda(ş²ìƒ8æ¸³Óœ.
-g
-java:S1124<"EReorder the modifiers to comply with the Java Language Specification.(¦æÅœıÿÿÿÿ8—ê§«œ.
-W
-java:S1068-":Remove this unused "bluetoothDeviceAddress" private field.(Ø´³¦8—ê§«œ.
-a
-java:S1155è">Use isEmpty() to check whether the collection is empty or not.(ÈäèËùÿÿÿÿ8æ¸³Óœ.
-E
-java:S1604q"(Make this anonymous inner class a lambda(†£°î8õËŠœ.
-P
-java:S1068."3Remove this unused "connectionState" private field.(öíòŠ8—ê§«œ.
-E
-java:S1604í"(Make this anonymous inner class a lambda(ç’ƒL8æ¸³Óœ.
-r	java:S116!"QRename this field "LOGTAG" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ñ€– øÿÿÿÿ8İ¾Ø´š.
-g
-java:S11246"EReorder the modifiers to comply with the Java Language Specification.(ï¸á¶ÿÿÿÿÿ8—ê§«œ.
-V
-java:S1854É"8Remove this useless assignment to local variable "data".(†í½§8öóÃÓœ.
-Q
-java:S1068)"/Remove this unused "SCAN_PERIOD" private field.(İ‘—Úÿÿÿÿÿ8—ê§«œ.
-^	java:S125€"<This block of commented-out lines of code should be removed.(²Ÿÿÿÿÿÿ8—ê§«œ.
-p
-java:S3776Ö"RRefactor this method to reduce its Cognitive Complexity from 19 to the 15 allowed.(Î¢È8—ê§«œ.
-s	java:S117à"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¯á¶•ÿÿÿÿÿ8æ¸³Óœ.
-P
-java:S1068G".Remove this unused "isRetrying" private field.(²ìí‚üÿÿÿÿ8—ê§«œ.
-Y	java:S125Ó"<This block of commented-out lines of code should be removed.(Şèò÷8æ¸³Óœ.
-C	java:S131Y""Add a default case to this switch.(³ÒÂŒÿÿÿÿÿ8—ê§«œ.
-E	java:S108t")Either remove or fill this block of code.(úÜ¸Ğ8—ê§«œ.
+java:S1481¾"(Remove this unused "map" local variable.(İ’¦8ä³×œ.
+r	java:S116"QRename this field "LOGTAG" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ñ€– øÿÿÿÿ8İ¾Ø´š.
+s	java:S117à"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(®¼†úÿÿÿÿ8æ¸³Óœ.
+H
+java:S1068#"+Remove this unused "handler" private field.(ïóî‘8©”Ùœ.
+O
+java:S1144Ù"1Remove this unused private "stopScanning" method.(Êçø 8°”Ï×œ.
+U
+java:S2589ã"7Remove this expression which always evaluates to "true"(¦çÀâ8æ¸³Óœ.
+U
+java:S1854¾"7Remove this useless assignment to local variable "map".(İ’¦8ä³×œ.
+o
+java:S3776G"RRefactor this method to reduce its Cognitive Complexity from 21 to the 15 allowed.(Î¢È8—ê§«œ.

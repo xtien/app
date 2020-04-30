@@ -15,7 +15,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import nl.christine.app.R;
+import nl.christine.app.adapter.ContactsAdapter;
 import nl.christine.app.viewmodel.TraceViewModel;
 
 /**
@@ -24,10 +27,14 @@ import nl.christine.app.viewmodel.TraceViewModel;
 public class TraceFragment extends Fragment {
 
     private TraceViewModel viewModel;
+    private RecyclerView listView;
+    private ContactsAdapter adapter;
+    private LinearLayoutManager layoutManager;
 
     public static TraceFragment newInstance(){
         return new TraceFragment();
     }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -36,9 +43,23 @@ public class TraceFragment extends Fragment {
     }
 
     @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+         listView = view.findViewById(R.id.listview);
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         viewModel = ViewModelProviders.of(this).get(TraceViewModel.class);
-        // TODO: Use the ViewModel
+        viewModel.getContacts().observe(getActivity(), contacts -> {
+            adapter.setContacts(contacts);
+            adapter.notifyDataSetChanged();
+        });
+
+        adapter = new ContactsAdapter();
+        layoutManager = new LinearLayoutManager(getActivity());
+        listView.setLayoutManager(layoutManager);
+        listView.setAdapter(adapter);
     }
 }

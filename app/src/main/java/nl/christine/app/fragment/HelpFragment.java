@@ -7,41 +7,48 @@
 
 package nl.christine.app.fragment;
 
+import android.bluetooth.BluetoothAdapter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 import nl.christine.app.R;
-import nl.christine.app.viewmodel.SettingsViewModel;
 
 /**
- * Settingsfragment contains the settings of the app other than debug settings or settings that
- * would be available to the user in a production app
+ * MainFragment contains the main controls of the app. These would include the controls a user in the production
+ * app would have, as well as testing and debugging controls.
  */
-public class SettingsFragment extends Fragment {
+public class HelpFragment extends Fragment {
 
-    private SettingsViewModel viewModel;
+    private BluetoothAdapter bluetoothAdapter;
+    private static final int PERMISSION_REQUEST_FINE_LOCATION = 1;
+    private static final int PERMISSION_REQUEST_BACKGROUND_LOCATION = 2;
+    private static final int REQUEST_ENABLE_BT = 11;
 
-    public static SettingsFragment newInstance() {
-        return new SettingsFragment();
+    private TextView helpTextView;
+
+    public static HelpFragment newInstance() {
+        return new HelpFragment();
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.settings_fragment, container, false);
+        return inflater.inflate(R.layout.help_fragment, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        helpTextView = view.findViewById(R.id.uuid);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        viewModel = ViewModelProviders.of(this).get(SettingsViewModel.class);
-        // TODO: Use the ViewModel
     }
-
 }

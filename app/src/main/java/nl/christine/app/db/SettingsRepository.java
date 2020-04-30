@@ -18,7 +18,7 @@ public class SettingsRepository {
     private LiveData<MySettings> settings;
 
     public SettingsRepository(Application application) {
-        SettingsDatabase db = SettingsDatabase.getDatabase(application);
+        AppDatabase db = AppDatabase.getDatabase(application);
         settingsDao = db.settingsDao();
         settings = settingsDao.getSettings();
     }
@@ -32,19 +32,19 @@ public class SettingsRepository {
     }
 
     public void update(final MySettings settings){
-        SettingsDatabase.databaseWriteExecutor.execute(() -> {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
             settingsDao.update(settings);
         });
     }
 
     public void setPeripheral(boolean on) {
-        SettingsDatabase.databaseWriteExecutor.execute(() -> {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
             settingsDao.setPeripheral(on);
         });
     }
 
     public void setDiscovering(boolean on) {
-        SettingsDatabase.databaseWriteExecutor.execute(() -> {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
             settingsDao.setDiscover(on);
         });
      }

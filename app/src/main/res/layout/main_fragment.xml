@@ -25,6 +25,7 @@
             android:visibility="gone"
             style="@style/title"
             />
+
     <TextView
             android:id="@+id/uuid"
             android:layout_width="wrap_content"
@@ -33,11 +34,22 @@
             style="@style/text"
             />
 
-    <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/clear"
-            android:id="@+id/clear" />
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/clear"
+                android:id="@+id/clear"/>
+
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/new_id"
+                android:id="@+id/new_id"/>
+    </LinearLayout>
 
     <TextView
             android:id="@+id/error_message"
@@ -57,6 +69,7 @@
                 android:id="@+id/discover_switch"
                 android:layout_weight="1"
                 />
+
         <TextView
                 android:text=""
                 android:layout_width="wrap_content"
@@ -65,7 +78,7 @@
                 android:layout_weight="5"
                 />
 
-     </LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
             android:layout_width="match_parent"

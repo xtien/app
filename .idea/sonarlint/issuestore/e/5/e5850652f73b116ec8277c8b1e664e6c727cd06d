@@ -1,33 +1,27 @@
 
+R
+java:S1066Œ"/Merge this if statement with the enclosing one.( á»üøÿÿÿÿ8íñİœ.
 
-java:S14506"]Remove the "peripheralText" field and declare it as a local variable in the relevant methods.(ÀªÄæşÿÿÿÿ8ÓÛĞ„œ.
-Ÿ
-java:S1186–"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ğÂ¤8š¦Ãˆœ.
-Z
-java:S1128"8Remove this unused import 'androidx.lifecycle.Observer'.(ÒÁˆÉşÿÿÿÿ8ğ¸ãˆœ.
-M
-java:S10684"0Remove this unused "discoverText" private field.(—Íœ8ÓÛĞ„œ.
-‚
-java:S1450:"`Remove the "settingsViewModel" field and declare it as a local variable in the relevant methods.(Œê½ßúÿÿÿÿ8ü·ôƒœ.
-V
-java:S10681"4Remove this unused "bluetoothService" private field.(ªÕÚúÿÿÿÿ8¦Î’œ.
-[
-java:S1128"">Remove this unused import 'nl.christine.app.model.MySettings'.(ï§´Ò8ğ¸ãˆœ.
-Ÿ
-java:S1186«"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ğÂ¤8š¦Ãˆœ.
-x
-java:S14504"[Remove the "discoverText" field and declare it as a local variable in the relevant methods.(—Íœ8ÓÛĞ„œ.
-F
-java:S10682")Remove this unused "bound" private field.(¶Şªì8ü·ôƒœ.
-Q
-java:S1066|"/Merge this if statement with the enclosing one.( á»üøÿÿÿÿ8š¦Ãˆœ.
-\
-java:S1128"?Remove this unused import 'android.bluetooth.BluetoothManager'.(úä­8”³Ñˆœ.
+java:S14507"]Remove the "peripheralText" field and declare it as a local variable in the relevant methods.(ÀªÄæşÿÿÿÿ8ÓÛĞ„œ.
 ~
-java:S1450;"\Remove the "layoutManager" field and declare it as a local variable in the relevant methods.(Çòçöûÿÿÿÿ8ÓÛĞ„œ.
-o
-java:S3776`"RRefactor this method to reduce its Cognitive Complexity from 25 to the 15 allowed.(Ö‰ü¼8š¦Ãˆœ.
-T
-java:S10686"2Remove this unused "peripheralText" private field.(ÀªÄæşÿÿÿÿ8ÓÛĞ„œ.
+java:S1450>"\Remove the "layoutManager" field and declare it as a local variable in the relevant methods.(Çòçöûÿÿÿÿ8ÓÛĞ„œ.
 9
-java:S3626Ğ"Remove this redundant jump.(ûÁİ…8š¦Ãˆœ.
+java:S3626à"Remove this redundant jump.(ûÁİ…8íñİœ.
+M
+java:S10685"0Remove this unused "discoverText" private field.(—Íœ8ÓÛĞ„œ.
+T
+java:S10687"2Remove this unused "peripheralText" private field.(ÀªÄæşÿÿÿÿ8ÓÛĞ„œ.
+Ÿ
+java:S1186¦"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ğÂ¤8íñİœ.
+x
+java:S14505"[Remove the "discoverText" field and declare it as a local variable in the relevant methods.(—Íœ8ÓÛĞ„œ.
+‚
+java:S1450="`Remove the "settingsViewModel" field and declare it as a local variable in the relevant methods.(Œê½ßúÿÿÿÿ8ü·ôƒœ.
+V
+java:S10682"4Remove this unused "bluetoothService" private field.(ªÕÚúÿÿÿÿ8¦Î’œ.
+F
+java:S10683")Remove this unused "bound" private field.(¶Şªì8ü·ôƒœ.
+o
+java:S3776e"RRefactor this method to reduce its Cognitive Complexity from 25 to the 15 allowed.(Ö‰ü¼8š¦Ãˆœ.
+Ÿ
+java:S1186»"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ğÂ¤8íñİœ.
