@@ -1,4 +1,4 @@
-# App
+# Bluetooth LE app experiment
 Bluetooth Low Engergy proximity test
 
 ## Goal
