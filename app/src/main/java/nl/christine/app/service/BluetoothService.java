@@ -39,7 +39,7 @@ public class BluetoothService extends Service {
     private boolean scanning = false;
     private boolean advertising = false;
     private String uuidString = null;
-    private String serviceUUIDString = "00001810-0000-1000-8000-00805f9b34fb";
+    private String serviceUUIDString = "00001830-0000-1000-8000-00805f9b34fb";
     private String serviceDataUUIDString = "00002a00-0000-1000-8000-00805f9b34fb";
 
     private BluetoothLeScanner scanner;
