@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2020, Zaphod Consulting BV, Christine Karman
+ * This project is free software: you can redistribute it and/or modify it under the terms of
+ * the Apache License, Version 2.0. You can find a copy of the license at
+ * http://www.apache.org/licenses/LICENSE-2.0.
+ */
+
 package nl.christine.app.service;
 
 import android.annotation.TargetApi;
@@ -229,7 +236,7 @@ public class BluetoothService extends Service {
                 Contact newContact = new Contact(id, txPowerLevel, System.currentTimeMillis());
                 contactRepository.create(newContact);
                 contacts.put(id, newContact);
-                log(LOGTAG, "id: " + id + " power level " + txPowerLevel);
+                log(LOGTAG, "id: " + id + " power " + txPowerLevel);
             } else {
                 Optional<Contact> foundContact = contactRepository.getContact(existingContact, timeWindow);
                 if (foundContact.isPresent()) {
