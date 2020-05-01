@@ -24,11 +24,19 @@ public class SettingsViewModel extends AndroidViewModel {
         return settings;
     }
 
-    public void setPeripheral(boolean on) {
-        repository.setPeripheral(on);
+    public void setPeripheral(boolean isChecked) {
+        repository.setPeripheral(isChecked);
     }
 
-    public void setDiscovering(boolean on ){
-        repository.setDiscovering(on);
+    public void setDiscovering(boolean isChecked ){
+        repository.setDiscovering(isChecked);
+    }
+
+    public void setAdvertiseMode(int mode) {
+        repository.setAdvertiseMode(mode);
+    }
+
+    public void setSignalStrength(int strength) {
+        repository.setSignalStrength(strength);
     }
 }

@@ -18,10 +18,7 @@ import android.os.IBinder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Switch;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -48,11 +45,10 @@ public class MainFragment extends Fragment {
     private static final int REQUEST_ENABLE_BT = 11;
 
     private BluetoothService bluetoothService;
-    private boolean bound;
     private Switch discoverSwitch;
-    private TextView discoverText;
     private Switch peripheralSwitch;
-    private TextView peripheralText;
+    private Spinner signalStrengthSpinner;
+    private Spinner advertiseModeSpinner;
     private RecyclerView listView;
     private TextView uuidView;
     private View clearButton;
@@ -89,9 +85,9 @@ public class MainFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         uuidView = view.findViewById(R.id.uuid);
         discoverSwitch = view.findViewById(R.id.discover_switch);
-        discoverText = view.findViewById(R.id.discover_text);
         peripheralSwitch = view.findViewById(R.id.peripheral_switch);
-        peripheralText = view.findViewById(R.id.peripheral_text);
+        signalStrengthSpinner = view.findViewById(R.id.signalstrength_switch);
+        advertiseModeSpinner = view.findViewById(R.id.advertisemode_switch);
         listView = view.findViewById(R.id.listview);
         clearButton = view.findViewById(R.id.clear);
         newIDButton = view.findViewById(R.id.new_id);
@@ -112,11 +108,11 @@ public class MainFragment extends Fragment {
         newIDButton.setOnClickListener(v -> {
             SharedPreferences prefs1 = getActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs1.edit();
-            editor.putString("uuid", UUID.randomUUID().toString());
+            editor.putString("uuid", UUID.randomUUID().toString().replace("-", "").substring(0, 17));
             editor.commit();
             uuidView.setText(prefs.getString("uuid", ""));
             peripheralSwitch.setChecked(false);
-         });
+        });
 
         clearButton.setOnClickListener(v -> adapter.clear());
 
@@ -127,8 +123,37 @@ public class MainFragment extends Fragment {
         });
 
         discoverSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> settingsViewModel.setDiscovering(isChecked));
-
         peripheralSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> settingsViewModel.setPeripheral(isChecked));
+
+        advertiseModeSpinner.setAdapter(ArrayAdapter.createFromResource(getActivity(),
+                R.array.advertisemode, android.R.layout.simple_spinner_item));
+        advertiseModeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                settingsViewModel.setAdvertiseMode(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        signalStrengthSpinner.setAdapter(ArrayAdapter.createFromResource(getActivity(),
+                R.array.signalstrength, android.R.layout.simple_spinner_item));
+        signalStrengthSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                settingsViewModel.setSignalStrength(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         switchBTOn();
@@ -242,12 +267,10 @@ public class MainFragment extends Fragment {
                                        IBinder service) {
             BluetoothService.LocalBinder binder = (BluetoothService.LocalBinder) service;
             bluetoothService = binder.getService();
-            bound = true;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
-            bound = false;
         }
     };
 }

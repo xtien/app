@@ -22,4 +22,8 @@ public class TraceViewModel extends AndroidViewModel {
     public LiveData<List<Contact>> getContacts() {
         return contacts;
     }
+
+    public void clear() {
+        repository.clear();
+    }
 }

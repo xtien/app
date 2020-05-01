@@ -42,4 +42,8 @@ public class ContactRepository {
         return contacts;
 
     }
+
+    public void clear() {
+        contactDao.clear();
+    }
 }

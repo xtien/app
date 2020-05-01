@@ -8,9 +8,11 @@
 package nl.christine.app.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -21,6 +23,9 @@ import nl.christine.app.R;
 import nl.christine.app.adapter.ContactsAdapter;
 import nl.christine.app.viewmodel.TraceViewModel;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 /**
  * Tracefragment shows a trace of bluetooth contacts, discoveries, interactions
  */
@@ -30,8 +35,10 @@ public class TraceFragment extends Fragment {
     private RecyclerView listView;
     private ContactsAdapter adapter;
     private LinearLayoutManager layoutManager;
+    private Button clearButton;
+    private ExecutorService es = Executors.newCachedThreadPool();
 
-    public static TraceFragment newInstance(){
+    public static TraceFragment newInstance() {
         return new TraceFragment();
     }
 
@@ -44,7 +51,8 @@ public class TraceFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-         listView = view.findViewById(R.id.listview);
+        listView = view.findViewById(R.id.listview);
+        clearButton = view.findViewById(R.id.clearcontacts);
     }
 
     @Override
@@ -61,5 +69,14 @@ public class TraceFragment extends Fragment {
         layoutManager = new LinearLayoutManager(getActivity());
         listView.setLayoutManager(layoutManager);
         listView.setAdapter(adapter);
+
+        clearButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                es.execute(() -> viewModel.clear());
+            }
+        });
     }
 }

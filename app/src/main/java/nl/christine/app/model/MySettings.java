@@ -16,6 +16,12 @@ public class MySettings {
     @ColumnInfo(name = "discovering")
     private boolean isDiscovering = false;
 
+    @ColumnInfo(name = "advertisemode")
+    private int advertiseMode = 0;
+
+    @ColumnInfo(name = "signalstrength")
+    private int signalStrength = 0;
+
     @ColumnInfo(name = "uuid")
     private String uuid;
 
@@ -49,5 +55,21 @@ public class MySettings {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    public int getAdvertiseMode() {
+        return advertiseMode;
+    }
+
+    public void setAdvertiseMode(int advertiseMode) {
+        this.advertiseMode = advertiseMode;
+    }
+
+    public int getSignalStrength() {
+        return signalStrength;
+    }
+
+    public void setSignalStrength(int signalStrength) {
+        this.signalStrength = signalStrength;
     }
 }

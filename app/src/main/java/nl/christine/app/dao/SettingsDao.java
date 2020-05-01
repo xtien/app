@@ -28,6 +28,12 @@ public interface SettingsDao {
     @Query("update settings_table set discovering = :discovering where id = 0")
     void setDiscover(boolean discovering);
 
+    @Query("update settings_table set advertisemode = :advertisemode where id = 0")
+    void setAdvertiseMode(int advertisemode);
+
+    @Query("update settings_table set signalstrength = :signalstrength where id = 0")
+    void setSignalStrength(int signalstrength);
+
     @Query("select uuid from settings_table where id = 0")
     String getUUID();
 }

@@ -37,15 +37,27 @@ public class SettingsRepository {
         });
     }
 
-    public void setPeripheral(boolean on) {
+    public void setPeripheral(boolean isChecked) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
-            settingsDao.setPeripheral(on);
+            settingsDao.setPeripheral(isChecked);
         });
     }
 
-    public void setDiscovering(boolean on) {
+    public void setDiscovering(boolean isChecked) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
-            settingsDao.setDiscover(on);
+            settingsDao.setDiscover(isChecked);
         });
      }
+
+    public void setAdvertiseMode(int mode) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            settingsDao.setAdvertiseMode(mode);
+        });
+    }
+
+    public void setSignalStrength(int strength) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            settingsDao.setSignalStrength(strength);
+        });
+    }
 }

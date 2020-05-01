@@ -1,5 +1,6 @@
 package nl.christine.app.service;
 
+import android.annotation.TargetApi;
 import android.app.*;
 import android.bluetooth.*;
 import android.bluetooth.le.*;
@@ -29,11 +30,10 @@ public class BluetoothService extends Service {
     private String LOGTAG = getClass().getSimpleName();
     private static final String CHANNEL_ID = "3000";
     private IBinder binder;
-    private int NOTIFICATION = R.string.local_service_started;
-    private NotificationManager notfManager;
+     private NotificationManager notfManager;
     private BluetoothAdapter bluetoothAdapter;
-    private Handler handler = new Handler();
     private boolean scanning = false;
+    private boolean advertising = false;
     private String uuidString = null;
     private String serviceUUIDString = "00001810-0000-1000-8000-00805f9b34fb";
     private String serviceDataUUIDString = "00002a00-0000-1000-8000-00805f9b34fb";
@@ -42,9 +42,11 @@ public class BluetoothService extends Service {
     private SettingsRepository repository;
     private Observer<MySettings> observer;
 
-    private boolean advertising = false;
     private Map<String, Contact> contacts = new HashMap<>();
     private ContactRepository contactRepository;
+    private int notificationId = 37;
+    private int advertiseMode = 0;
+    private int signalStrength = 0;
 
     public class LocalBinder extends Binder {
         public BluetoothService getService() {
@@ -58,26 +60,58 @@ public class BluetoothService extends Service {
         public void onStartSuccess(AdvertiseSettings settingsInEffect) {
             super.onStartSuccess(settingsInEffect);
             log(LOGTAG, "advertising onStartSuccess " + uuidString);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (!scanning) {
+                    showPermanentNotification(R.string.local_service_started);
+                }
+            }
         }
 
         @Override
         public void onStartFailure(int errorCode) {
             super.onStartFailure(errorCode);
             log("BLE", "Advertising onStartFailure: " + errorCode);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (!scanning) {
+                    notfManager.cancel(notificationId);
+                }
+            }
+        }
+    };
+
+    private ScanCallback leScanCallback = new ScanCallback() {
+
+        @Override
+        public void onBatchScanResults(List<ScanResult> results) {
+            log(LOGTAG, "BT LE device batch scan " + results.size());
+        }
+
+        @Override
+        public void onScanResult(int callbackType, ScanResult result) {
+
+            ScanRecord scanRecord = result.getScanRecord();
+
+            if (scanRecord.getDeviceName() != null) {
+                log(LOGTAG, "BT LE device scan " + scanRecord.getDeviceName());
+            }
+
+            byte[] data = result.getScanRecord().getServiceData(ParcelUuid.fromString(serviceDataUUIDString));
+            if (data != null) {
+                String id = new String(data);
+                displayContact(id, scanRecord.getTxPowerLevel());
+            }
         }
     };
 
     @Override
     public void onCreate() {
 
-        // https://medium.com/@martijn.van.welie/making-android-ble-work-part-1-a736dcd53b02
-
         contactRepository = new ContactRepository(getApplication());
 
         SharedPreferences prefs = getSharedPreferences("prefs", Context.MODE_PRIVATE);
         uuidString = prefs.getString("uuid", null);
         if (uuidString == null) {
-            uuidString = UUID.randomUUID().toString();
+            uuidString = UUID.randomUUID().toString().replace("-", "").substring(0, 17);
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString("uuid", uuidString);
             editor.commit();
@@ -106,6 +140,9 @@ public class BluetoothService extends Service {
                     BluetoothService.this.stopAdvertising();
                 }
             }
+
+            advertiseMode = settings.getAdvertiseMode();
+            signalStrength = settings.getSignalStrength();
         };
 
         repository.getSettings().observeForever(observer);
@@ -113,9 +150,6 @@ public class BluetoothService extends Service {
         notfManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         createNotificationChannel();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            showPermanentNotification(R.string.local_service_started);
-        }
         final BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         bluetoothAdapter = bluetoothManager.getAdapter();
         if (!bluetoothAdapter.isEnabled()) {
@@ -128,6 +162,9 @@ public class BluetoothService extends Service {
         BluetoothLeAdvertiser advertiser = BluetoothAdapter.getDefaultAdapter().getBluetoothLeAdvertiser();
         advertiser.stopAdvertising(advertisingCallback);
         advertising = false;
+        if (!scanning) {
+            notfManager.cancel(notificationId);
+        }
     }
 
     private void advertise() {
@@ -135,14 +172,14 @@ public class BluetoothService extends Service {
         advertising = true;
         BluetoothLeAdvertiser advertiser = BluetoothAdapter.getDefaultAdapter().getBluetoothLeAdvertiser();
 
-        if(advertiser == null){
+        if (advertiser == null) {
             log(LOGTAG, "No bluetooth LE advertiser");
             return;
         }
 
         AdvertiseSettings advertiseSettings = new AdvertiseSettings.Builder()
-                .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
-                .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH)
+                .setAdvertiseMode(advertiseMode)
+                .setTxPowerLevel(signalStrength)
                 .setConnectable(true)
                 .setTimeout(180000)
                 .build();
@@ -154,7 +191,7 @@ public class BluetoothService extends Service {
                 .setIncludeDeviceName(false)
                 .setIncludeTxPowerLevel(true)
                 .addServiceUuid(serviceUUID)
-                .addServiceData(serviceDataUUID, uuidString.replace("-", "").substring(0, 17).getBytes())
+                .addServiceData(serviceDataUUID, uuidString.getBytes())
                 .build();
 
         advertiser.startAdvertising(advertiseSettings, data, advertisingCallback);
@@ -168,34 +205,6 @@ public class BluetoothService extends Service {
         sendBroadcast(icycle);
     }
 
-    private ScanCallback leScanCallback =
-
-            new ScanCallback() {
-
-
-                @Override
-                public void onBatchScanResults(List<ScanResult> results) {
-                    log(LOGTAG, "BT LE device batch scan " + results.size());
-                }
-
-                @Override
-                public void onScanResult(int callbackType, ScanResult result) {
-
-                    ScanRecord scanRecord = result.getScanRecord();
-
-                    if (scanRecord.getDeviceName() != null) {
-                        log(LOGTAG, "BT LE device scan " + scanRecord.getDeviceName());
-                    }
-
-                    Map<ParcelUuid, byte[]> map = result.getScanRecord().getServiceData();
-                    byte[] data = result.getScanRecord().getServiceData(ParcelUuid.fromString(serviceDataUUIDString));
-                    if (data != null) {
-                        String id = new String(data);
-                        displayContact(id, scanRecord.getTxPowerLevel());
-                    }
-                }
-            };
-
     private void displayContact(String id, int txPowerLevel) {
 
         Contact existingContact = contacts.get(id);
@@ -208,19 +217,15 @@ public class BluetoothService extends Service {
             existingContact.plusplus();
             if (txPowerLevel > existingContact.getPowerLevel()) {
                 existingContact.setPowerLevel(txPowerLevel);
-                 log(LOGTAG, "id: " + id + " power " + txPowerLevel);
+                log(LOGTAG, "id: " + id + " power " + txPowerLevel);
             }
             contactRepository.update(existingContact);
         }
     }
 
-    private void stopScanning() {
-        scanLeDevice(false);
-    }
-
     private void scanLeDevice(final boolean enable) {
-        if (enable) {
 
+        if (enable) {
             UUID BLP_SERVICE_UUID = UUID.fromString(serviceUUIDString);
             UUID[] serviceUUIDs = new UUID[]{BLP_SERVICE_UUID};
             List<ScanFilter> filters = null;
@@ -238,9 +243,18 @@ public class BluetoothService extends Service {
             scanning = true;
             scanner.startScan(leScanCallback);
 
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (!advertising) {
+                    showPermanentNotification(R.string.local_service_started);
+                }
+            }
+
         } else {
             scanning = false;
             scanner.stopScan(leScanCallback);
+            if (!advertising) {
+                notfManager.cancel(notificationId);
+            }
         }
     }
 
@@ -253,7 +267,7 @@ public class BluetoothService extends Service {
     @Override
     public void onDestroy() {
         // Cancel the persistent notification.
-        notfManager.cancel(NOTIFICATION);
+        notfManager.cancel(notificationId);
 
         // Tell the user we stopped.
         Toast.makeText(this, R.string.local_service_stopped, Toast.LENGTH_SHORT).show();
@@ -261,6 +275,7 @@ public class BluetoothService extends Service {
         repository.getSettings().removeObserver(observer);
     }
 
+    @TargetApi(Build.VERSION_CODES.O)
     private void showPermanentNotification(int text) {
 
         Log.d(LOGTAG, getString(text));
@@ -270,7 +285,7 @@ public class BluetoothService extends Service {
 
         // Set the info for the views that show in the notification panel.
         Notification notification = new Notification.Builder(this, "")
-                .setSmallIcon(R.drawable.x10)  // the status icon
+                .setSmallIcon(R.drawable.lb)  // the status icon
                 .setChannelId(CHANNEL_ID)
                 .setTicker("status")  // the status text
                 .setOngoing(true)
@@ -281,9 +296,10 @@ public class BluetoothService extends Service {
                 .build();
 
         // Send the notification.
-        notfManager.notify(text, notification);
+        notfManager.notify(notificationId, notification);
     }
 
+    @TargetApi(Build.VERSION_CODES.O)
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = getString(R.string.channel_name);

@@ -25,5 +25,20 @@
     <string name="help4">Generates a new ID, so for a scanning phone it is a new device.</string>
     <string name="help5_title">Contacts</string>
     <string name="help5">List of contacts your app has picked up.</string>
+    <string name="advertising_mode">Advertising mode</string>
+    <string name="signal_strength">Signal strength</string>
+
+    <array name="signalstrength">
+        <item>ultra low</item>
+        <item>low</item>
+        <item>medium</item>
+        <item>high</item>
+    </array>
+
+    <array name="advertisemode">
+        <item>low power</item>
+        <item>balanced</item>
+        <item>low latency</item>
+    </array>
 
 </resources>

@@ -21,7 +21,7 @@ import nl.christine.app.model.MySettings;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {MySettings.class, Contact.class}, views = {SettingsView.class}, version = 1)
+@Database(entities = {MySettings.class, Contact.class}, views = {SettingsView.class}, version = 2)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static Callback databaseCallback = new RoomDatabase.Callback() {
@@ -54,6 +54,7 @@ public abstract class AppDatabase extends RoomDatabase {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             AppDatabase.class, "app_database")
                             .addCallback(databaseCallback)
+                            .fallbackToDestructiveMigration()
                             .build();
                 }
             }

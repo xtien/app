@@ -27,4 +27,7 @@ public interface ContactDao {
 
     @Insert
     void create(Contact contact);
+
+    @Query("delete from contact_table")
+    void clear();
 }
