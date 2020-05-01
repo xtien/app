@@ -31,4 +31,7 @@
     <style name="buttonstyle" parent="switchstyle">
     </style>
 
+    <style name="spinnerstyle" parent="switchstyle">
+    </style>
+
 </resources>

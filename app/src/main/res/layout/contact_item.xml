@@ -7,32 +7,35 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="horizontal"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+             android:orientation="horizontal"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content">
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/text"
-            android:id="@+id/contact_id"/>
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                style="@style/text"
+                android:layout_weight="6"
+                android:id="@+id/contact_id"/>
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/text"
-            android:id="@+id/time"/>
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                style="@style/text"
+                android:layout_weight="3"
+                android:id="@+id/time"/>
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/text"
-            android:id="@+id/number"/>
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                style="@style/text"
+                android:layout_weight="1"
+                android:id="@+id/number"/>
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/text"
-            android:id="@+id/power"/>
-
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                style="@style/text"
+                android:layout_weight="1"
+                android:id="@+id/power"/>
 </LinearLayout>

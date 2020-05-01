@@ -12,7 +12,9 @@ import androidx.lifecycle.LiveData;
 import nl.christine.app.dao.ContactDao;
 import nl.christine.app.model.Contact;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 public class ContactRepository {
 
@@ -45,5 +47,11 @@ public class ContactRepository {
 
     public void clear() {
         contactDao.clear();
+    }
+
+    public Optional<Contact> getContact(Contact existingContact, long timeWindow) {
+        long t = System.currentTimeMillis() - timeWindow;
+        List<Contact> contacts = contactDao.getContactByContactID(existingContact.getContactId());
+        return contacts.stream().max(Comparator.comparing(Contact::getTime)).filter(c -> c.getTime() > t);
     }
 }

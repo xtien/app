@@ -39,4 +39,8 @@ public class SettingsViewModel extends AndroidViewModel {
     public void setSignalStrength(int strength) {
         repository.setSignalStrength(strength);
     }
+
+    public void setTimeWindow(long mSecs) {
+        repository.setTimeWindow(mSecs);
+    }
 }

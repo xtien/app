@@ -1,8 +1,8 @@
 # Bluetooth LE app experiment
-Bluetooth Low Engergy proximity test
 
 ## Goal
-I created this app to see how hard it is to use Bluetooth Low Energy for proximity tests.
+I created this app to see how hard it is to use Bluetooth Low Energy for proximity detection. The app scans for
+other devices and it advertises itself as a device.
 
 ## Functions
 #### ID
@@ -19,8 +19,8 @@ advertise the right UUID (built into the app, this is not the id mentioned above
  
  #### Advertising mode
  This is the strategy bluetooth LE should use for advertising the device. Choices are
- - low power
- - balanced: 
+ - low power: saving energy
+ - balanced: optimal balance 
  - low latency: best performance, high power consumption
 
  #### Signal strength
@@ -29,6 +29,9 @@ advertise the right UUID (built into the app, this is not the id mentioned above
  - low
  - medium
  - high
+ 
+ #### Clear list
+ Clears the list of contacts in your screen. It doesn't affect the database.
  
  #### New ID
  You can change the app unique ID.
@@ -41,5 +44,9 @@ advertise the right UUID (built into the app, this is not the id mentioned above
  - date and time
  - number of detections
  - signal strength
+ One could use a combination of signal strength and number of detections to determine whether a contact
+ needs to be registered as a "detected contact". Number of detections is done within a limited time frame, 15 minutes.
+ 
+ The clear button on the right clears the database and the contact screen. 
  
 

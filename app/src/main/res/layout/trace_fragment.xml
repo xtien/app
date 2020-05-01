@@ -35,7 +35,7 @@
                 android:id="@+id/clearcontacts"
                 style="@style/buttonstyle"
                 android:layout_weight="0"
-                android:text="@string/clear"
+                android:text="@string/clear_contacts"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
     </LinearLayout>

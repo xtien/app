@@ -60,4 +60,10 @@ public class SettingsRepository {
             settingsDao.setSignalStrength(strength);
         });
     }
+
+    public void setTimeWindow(long mSecs) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            settingsDao.setTimeWindow(mSecs);
+        });
+    }
 }

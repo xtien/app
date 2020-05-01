@@ -20,6 +20,10 @@ import nl.christine.app.model.Contact;
 import nl.christine.app.model.MySettings;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * BluetoothService does everything bluetooth. It switches on at phone startup, starts discovery,
@@ -30,7 +34,7 @@ public class BluetoothService extends Service {
     private String LOGTAG = getClass().getSimpleName();
     private static final String CHANNEL_ID = "3000";
     private IBinder binder;
-     private NotificationManager notfManager;
+    private NotificationManager notfManager;
     private BluetoothAdapter bluetoothAdapter;
     private boolean scanning = false;
     private boolean advertising = false;
@@ -47,6 +51,9 @@ public class BluetoothService extends Service {
     private int notificationId = 37;
     private int advertiseMode = 0;
     private int signalStrength = 0;
+
+    private ScheduledExecutorService es = Executors.newScheduledThreadPool(3);
+    private long timeWindow = 60000;
 
     public class LocalBinder extends Binder {
         public BluetoothService getService() {
@@ -121,6 +128,10 @@ public class BluetoothService extends Service {
 
         observer = settings -> {
 
+            advertiseMode = settings.getAdvertiseMode();
+            signalStrength = settings.getSignalStrength();
+            timeWindow = settings.getTimewindow();
+
             if (settings.isDiscovering()) {
                 if (!scanning) {
                     BluetoothService.this.scanLeDevice(true);
@@ -131,18 +142,23 @@ public class BluetoothService extends Service {
                 }
             }
 
+            boolean advertisingHandled = false;
             if (settings.isPeripheral()) {
                 if (!advertising) {
+                    advertisingHandled = true;
                     BluetoothService.this.advertise();
                 }
             } else {
                 if (advertising) {
+                    advertisingHandled = true;
                     BluetoothService.this.stopAdvertising();
                 }
             }
 
-            advertiseMode = settings.getAdvertiseMode();
-            signalStrength = settings.getSignalStrength();
+            if (!advertisingHandled && advertising) {
+                es.execute(() -> BluetoothService.this.stopAdvertising());
+                es.schedule(() -> BluetoothService.this.advertise(), 100l, TimeUnit.MILLISECONDS);
+            }
         };
 
         repository.getSettings().observeForever(observer);
@@ -207,20 +223,27 @@ public class BluetoothService extends Service {
 
     private void displayContact(String id, int txPowerLevel) {
 
-        Contact existingContact = contacts.get(id);
-        if (existingContact == null) {
-            Contact newContact = new Contact(id, txPowerLevel, System.currentTimeMillis());
-            contactRepository.create(newContact);
-            contacts.put(id, newContact);
-            log(LOGTAG, "id: " + id + " power level " + txPowerLevel);
-        } else {
-            existingContact.plusplus();
-            if (txPowerLevel > existingContact.getPowerLevel()) {
-                existingContact.setPowerLevel(txPowerLevel);
-                log(LOGTAG, "id: " + id + " power " + txPowerLevel);
+        es.execute(() -> {
+            Contact existingContact = contacts.get(id);
+            if (existingContact == null) {
+                Contact newContact = new Contact(id, txPowerLevel, System.currentTimeMillis());
+                contactRepository.create(newContact);
+                contacts.put(id, newContact);
+                log(LOGTAG, "id: " + id + " power level " + txPowerLevel);
+            } else {
+                Optional<Contact> foundContact = contactRepository.getContact(existingContact, timeWindow);
+                if (foundContact.isPresent()) {
+                    existingContact = foundContact.get();
+                }
+                existingContact.plusplus();
+                if (txPowerLevel > existingContact.getPowerLevel()) {
+                    existingContact.setPowerLevel(txPowerLevel);
+                    log(LOGTAG, "id: " + id + " power " + txPowerLevel);
+                }
+                contacts.put(existingContact.getContactId(), existingContact);
+                contactRepository.update(existingContact);
             }
-            contactRepository.update(existingContact);
-        }
+        });
     }
 
     private void scanLeDevice(final boolean enable) {

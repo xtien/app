@@ -36,4 +36,7 @@ public interface SettingsDao {
 
     @Query("select uuid from settings_table where id = 0")
     String getUUID();
+
+    @Query("update settings_table set timewindow = :mSecs where id = 0")
+    void setTimeWindow(long mSecs);
 }

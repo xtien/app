@@ -17,31 +17,75 @@
         tools:context=".fragment.TraceFragment"
         android:padding="20dp">
 
-    <TextView
-            android:id="@+id/uuid"
-            android:layout_width="wrap_content"
+    <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Main"
-            style="@style/text"
-            />
+            android:orientation="horizontal">
+
+        <TextView
+                android:text="@string/id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/text"
+                />
+
+        <TextView
+                android:id="@+id/uuid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/text"
+                />
+    </LinearLayout>
 
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="6dp">
 
-        <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/clear"
-                android:id="@+id/clear"/>
+        <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
 
-        <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/new_id"
-                android:layout_marginLeft="6dp"
-                android:id="@+id/new_id"/>
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/clear"
+                    android:id="@+id/clear"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/new_id"
+                    android:id="@+id/new_id"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+
+            <TextView
+                    android:text="@string/timewindow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+            <Spinner
+                    android:layout_width="wrap_content"
+                    style="@style/spinnerstyle"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/timewindow"/>
+        </LinearLayout>
     </LinearLayout>
 
     <TextView
@@ -105,7 +149,7 @@
                 android:text="Advertise mode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/switchstyle"
+                style="@style/spinnerstyle"
                 android:id="@+id/advertisemode_switch"
                 android:layout_weight="1"
                 />
@@ -114,7 +158,7 @@
                 android:text="Signal strength"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/switchstyle"
+                style="@style/spinnerstyle"
                 android:id="@+id/signalstrength_switch"
                 android:layout_weight="1"
                 />

@@ -23,15 +23,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import nl.christine.app.R;
 import nl.christine.app.adapter.MainAdapter;
+import nl.christine.app.model.MySettings;
 import nl.christine.app.service.BluetoothService;
 import nl.christine.app.viewmodel.SettingsViewModel;
 
-import java.util.UUID;
+import java.util.*;
 
 /**
  * MainFragment contains the main controls of the app. These would include the controls a user in the production
@@ -53,6 +55,8 @@ public class MainFragment extends Fragment {
     private TextView uuidView;
     private View clearButton;
     private Button newIDButton;
+    private Spinner timewindowSpinner;
+    private List<Long> timewindows = new ArrayList<>();
 
     private SettingsViewModel settingsViewModel;
     private LinearLayoutManager layoutManager;
@@ -91,11 +95,20 @@ public class MainFragment extends Fragment {
         listView = view.findViewById(R.id.listview);
         clearButton = view.findViewById(R.id.clear);
         newIDButton = view.findViewById(R.id.new_id);
+        timewindowSpinner = view.findViewById(R.id.timewindow);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        timewindows.add(60000l);
+        timewindows.add(120000l);
+        timewindows.add(300000l);
+        timewindows.add(600000l);
+        timewindows.add(3600000l);
+
+        String[] signalStrenghts = getResources().getStringArray(R.array.signalstrength);
 
         SharedPreferences prefs = getActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
         uuidView.setText(prefs.getString("uuid", ""));
@@ -116,11 +129,6 @@ public class MainFragment extends Fragment {
 
         clearButton.setOnClickListener(v -> adapter.clear());
 
-        settingsViewModel = ViewModelProviders.of(this).get(SettingsViewModel.class);
-        settingsViewModel.getSettings().observe(getActivity(), settings -> {
-            discoverSwitch.setChecked(settings != null && settings.isDiscovering());
-            peripheralSwitch.setChecked(settings != null && settings.isPeripheral());
-        });
 
         discoverSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> settingsViewModel.setDiscovering(isChecked));
         peripheralSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> settingsViewModel.setPeripheral(isChecked));
@@ -153,6 +161,34 @@ public class MainFragment extends Fragment {
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
+        });
+
+        timewindowSpinner.setAdapter(ArrayAdapter.createFromResource(getActivity(), R.array.timewindow, android.R.layout.simple_spinner_item));
+        timewindowSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                settingsViewModel.setTimeWindow(timewindows.get(position));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        settingsViewModel = ViewModelProviders.of(this).get(SettingsViewModel.class);
+        settingsViewModel.getSettings().observe(getActivity(), settings -> {
+            discoverSwitch.setChecked(settings != null && settings.isDiscovering());
+            peripheralSwitch.setChecked(settings != null && settings.isPeripheral());
+            long timeWindow = settings.getTimewindow();
+            for (int i = 0; i < timewindows.size(); i++) {
+                if (timewindows.get(i) == timeWindow) {
+                    timewindowSpinner.setSelection(i);
+                }
+            }
+            advertiseModeSpinner.setSelection(settings.getAdvertiseMode());
+            signalStrengthSpinner.setSelection(settings.getSignalStrength());
         });
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();

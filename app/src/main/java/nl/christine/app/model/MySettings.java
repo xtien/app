@@ -22,6 +22,9 @@ public class MySettings {
     @ColumnInfo(name = "signalstrength")
     private int signalStrength = 0;
 
+    @ColumnInfo(name = "timewindow")
+    private long timewindow = 0l;
+
     @ColumnInfo(name = "uuid")
     private String uuid;
 
@@ -71,5 +74,13 @@ public class MySettings {
 
     public void setSignalStrength(int signalStrength) {
         this.signalStrength = signalStrength;
+    }
+
+    public long getTimewindow() {
+        return timewindow;
+    }
+
+    public void setTimewindow(long timewindow) {
+        this.timewindow = timewindow;
     }
 }
