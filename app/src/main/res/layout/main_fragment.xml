@@ -27,14 +27,31 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/text"
+                android:layout_weight="0"
                 />
 
         <TextView
                 android:id="@+id/uuid"
                 android:layout_width="wrap_content"
+                android:layout_weight="0"
                 android:layout_height="wrap_content"
                 style="@style/text"
                 />
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:orientation="horizontal">
+
+            <TextView
+                    android:id="@+id/version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/version"
+                    />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout

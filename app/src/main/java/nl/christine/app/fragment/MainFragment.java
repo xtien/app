@@ -23,17 +23,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import nl.christine.app.BuildConfig;
 import nl.christine.app.R;
 import nl.christine.app.adapter.MainAdapter;
-import nl.christine.app.model.MySettings;
 import nl.christine.app.service.BluetoothService;
 import nl.christine.app.viewmodel.SettingsViewModel;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * MainFragment contains the main controls of the app. These would include the controls a user in the production
@@ -56,6 +57,7 @@ public class MainFragment extends Fragment {
     private View clearButton;
     private Button newIDButton;
     private Spinner timewindowSpinner;
+    private TextView versionView;
     private List<Long> timewindows = new ArrayList<>();
 
     private SettingsViewModel settingsViewModel;
@@ -96,6 +98,7 @@ public class MainFragment extends Fragment {
         clearButton = view.findViewById(R.id.clear);
         newIDButton = view.findViewById(R.id.new_id);
         timewindowSpinner = view.findViewById(R.id.timewindow);
+        versionView = view.findViewById(R.id.version);
     }
 
     @Override
@@ -117,6 +120,7 @@ public class MainFragment extends Fragment {
         layoutManager = new LinearLayoutManager(getActivity());
         listView.setLayoutManager(layoutManager);
         listView.setAdapter(adapter);
+        versionView.setText(BuildConfig.VERSION_NAME);
 
         newIDButton.setOnClickListener(v -> {
             SharedPreferences prefs1 = getActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);

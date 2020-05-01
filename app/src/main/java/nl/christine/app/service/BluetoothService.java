@@ -238,9 +238,9 @@ public class BluetoothService extends Service {
                 contacts.put(id, newContact);
                 log(LOGTAG, "id: " + id + " power " + txPowerLevel);
             } else {
-                Optional<Contact> foundContact = contactRepository.getContact(existingContact, timeWindow);
-                if (foundContact.isPresent()) {
-                    existingContact = foundContact.get();
+                Contact foundContact = contactRepository.getContact(existingContact, timeWindow);
+                if (foundContact != null) {
+                    existingContact = foundContact;
                 }
                 existingContact.plusplus();
                 if (txPowerLevel > existingContact.getPowerLevel()) {
@@ -259,14 +259,12 @@ public class BluetoothService extends Service {
             UUID BLP_SERVICE_UUID = UUID.fromString(serviceUUIDString);
             UUID[] serviceUUIDs = new UUID[]{BLP_SERVICE_UUID};
             List<ScanFilter> filters = null;
-            if (serviceUUIDs != null) {
-                filters = new ArrayList<>();
-                for (UUID serviceUUID : serviceUUIDs) {
-                    ScanFilter filter = new ScanFilter.Builder()
-                            .setServiceUuid(new ParcelUuid(serviceUUID))
-                            .build();
-                    filters.add(filter);
-                }
+            filters = new ArrayList<>();
+            for (UUID serviceUUID : serviceUUIDs) {
+                ScanFilter filter = new ScanFilter.Builder()
+                        .setServiceUuid(new ParcelUuid(serviceUUID))
+                        .build();
+                filters.add(filter);
             }
 
             scanner.flushPendingScanResults(leScanCallback);
