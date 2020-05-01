@@ -281,6 +281,7 @@ public class MainFragment extends Fragment {
     private void switchBTOn() {
         if (bluetoothAdapter == null) {
             TextView errorTextView = getActivity().findViewById(R.id.error_message);
+            errorTextView.setVisibility(View.VISIBLE);
             errorTextView.setText(R.string.no_bluetooth);
             return;
         } else {
