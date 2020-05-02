@@ -45,6 +45,8 @@
     <string name="help10">List of contacts your app has picked up.</string>
     <string name="help11_title">Clear contacts</string>
     <string name="help11">Clears the database</string>
+    <string name="help12_title">Contact columns</string>
+    <string name="help12">ID, date, time, number of detections, power set by sender, power received. Power is a mostly negative number as it is measured in dB.</string>
     <string name="advertising_mode">Advertising mode</string>
     <string name="signal_strength">Signal strength</string>
     <string name="timewindow">Time window</string>

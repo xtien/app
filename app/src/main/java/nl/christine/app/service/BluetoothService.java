@@ -246,7 +246,7 @@ public class BluetoothService extends Service {
                 }
                 existingContact.plusplus();
                 if (rssi > existingContact.getRssi()) {
-                    existingContact.setPowerLevel(rssi);
+                    existingContact.setRssi(rssi);
                     log(LOGTAG, "id: " + id + " power " + txPowerLevel + " " + rssi);
                 }
                 contacts.put(existingContact.getContactId(), existingContact);
