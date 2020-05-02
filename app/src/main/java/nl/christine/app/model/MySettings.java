@@ -14,8 +14,11 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "settings_table")
 public class MySettings {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     private int id;
+
+    @ColumnInfo(name="settingsid")
+    private int settingsId;
 
     @ColumnInfo(name = "peripheral")
     private boolean isPeripheral = false;
@@ -111,5 +114,13 @@ public class MySettings {
 
     public void setContactsCutoff(int contactsCutoff) {
         this.contactsCutoff = contactsCutoff;
+    }
+
+    public int getSettingsId() {
+        return settingsId;
+    }
+
+    public void setSettingsId(int settingsId) {
+        this.settingsId = settingsId;
     }
 }

@@ -17,7 +17,7 @@ import nl.christine.app.model.MySettings;
 @Dao
 public interface SettingsDao {
 
-    @Query("select * from settings_table where id = 0")
+    @Query("select * from settings_table where settingsid = 0")
     public LiveData<MySettings> getSettings();
 
     @Update

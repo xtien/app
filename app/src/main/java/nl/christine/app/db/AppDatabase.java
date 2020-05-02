@@ -8,6 +8,7 @@
 package nl.christine.app.db;
 
 import android.content.Context;
+import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
@@ -22,7 +23,7 @@ import nl.christine.app.model.MySettings;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {MySettings.class, Contact.class}, views = {SettingsView.class}, version = 4)
+@Database(entities = {MySettings.class, Contact.class}, views = {SettingsView.class}, version = 5)
 public abstract class AppDatabase extends RoomDatabase {
 
      private static final Migration MIGRATION_2_3 = new Migration(2, 3) {
@@ -43,6 +44,15 @@ public abstract class AppDatabase extends RoomDatabase {
             database.execSQL("ALTER TABLE settings_table "
                     + " ADD COLUMN contactscutoff INTEGER DEFAULT 0 NOT NULL");
         }
+    };
+
+    private static final Migration MIGRATION_4_5 = new Migration(4, 5) {
+
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE settings_table "
+                    + " ADD COLUMN settingsid INTEGER DEFAULT 0 NOT NULL");
+         }
     };
 
     private static Callback databaseCallback = new RoomDatabase.Callback() {
@@ -74,8 +84,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             AppDatabase.class, "app_database")
-                            .addMigrations(MIGRATION_2_3, MIGRATION_3_4)
-                            .addCallback(databaseCallback)
+                            .addMigrations(MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
                             .addCallback(databaseCallback)
                             .build();
                 }

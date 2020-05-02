@@ -139,7 +139,12 @@ public class MainFragment extends Fragment {
         clearButton.setOnClickListener(v -> adapter.clear());
 
         discoverSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> settingsViewModel.setDiscovering(isChecked));
-        peripheralSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> settingsViewModel.setPeripheral(isChecked));
+        peripheralSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                settingsViewModel.setPeripheral(isChecked);
+            }
+        });
 
         advertiseModeSpinner.setAdapter(ArrayAdapter.createFromResource(getActivity(),
                 R.array.advertisemode, android.R.layout.simple_spinner_item));
