@@ -15,7 +15,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,6 +76,8 @@ public class MainFragment extends Fragment {
             listView.smoothScrollToPosition(adapter.getItemCount() - 1);
         }
     };
+    private Spinner cutoffStrengthSpinner;
+    private Spinner numberOfContactsCutoffSpinner;
 
     public static MainFragment newInstance() {
         return new MainFragment();
@@ -94,13 +95,15 @@ public class MainFragment extends Fragment {
         uuidView = view.findViewById(R.id.uuid);
         discoverSwitch = view.findViewById(R.id.discover_switch);
         peripheralSwitch = view.findViewById(R.id.peripheral_switch);
-        signalStrengthSpinner = view.findViewById(R.id.signalstrength_switch);
-        advertiseModeSpinner = view.findViewById(R.id.advertisemode_switch);
+        signalStrengthSpinner = view.findViewById(R.id.signalstrength_spinner);
+        advertiseModeSpinner = view.findViewById(R.id.advertisemode_spinner);
         listView = view.findViewById(R.id.listview);
         clearButton = view.findViewById(R.id.clear);
         newIDButton = view.findViewById(R.id.new_id);
         timewindowSpinner = view.findViewById(R.id.timewindow);
         versionView = view.findViewById(R.id.version);
+        cutoffStrengthSpinner = view.findViewById(R.id.cutoffsignalstrength_spinner);
+        numberOfContactsCutoffSpinner = view.findViewById(R.id.numberofcontacts_spinner);
     }
 
     @Override
@@ -109,9 +112,11 @@ public class MainFragment extends Fragment {
 
         String[] timewindowValues = getResources().getStringArray(R.array.timewindow_values);
         timewindows.clear();
-        for(String s : timewindowValues){
+        for (String s : timewindowValues) {
             timewindows.add(Long.parseLong(s));
         }
+        String[] numberOfContactsCutoffValues = getResources().getStringArray(R.array.number_of_contacts_cutoff);
+        String[] cutoffStrengthValues = getResources().getStringArray(R.array.cutoff_strength);
 
         SharedPreferences prefs = getActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
         uuidView.setText(prefs.getString("uuid", ""));
@@ -159,6 +164,35 @@ public class MainFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 settingsViewModel.setSignalStrength(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        numberOfContactsCutoffSpinner.setAdapter(ArrayAdapter.createFromResource(getActivity(), R.array.number_of_contacts_cutoff, android.R.layout.simple_spinner_item));
+        numberOfContactsCutoffSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                settingsViewModel.setNumberOfContactsCutoff(Integer.parseInt(numberOfContactsCutoffValues[position]));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        cutoffStrengthSpinner.setAdapter((ArrayAdapter.createFromResource(getActivity(), R.array.cutoff_strength, android.R.layout.simple_spinner_item)));
+        cutoffStrengthSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                settingsViewModel.setCutoffStrength(Integer.parseInt(cutoffStrengthValues[position]));
             }
 
             @Override

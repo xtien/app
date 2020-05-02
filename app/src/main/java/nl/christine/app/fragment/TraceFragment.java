@@ -8,7 +8,6 @@
 package nl.christine.app.fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import nl.christine.app.R;
 import nl.christine.app.adapter.ContactsAdapter;
+import nl.christine.app.viewmodel.SettingsViewModel;
 import nl.christine.app.viewmodel.TraceViewModel;
 
 import java.util.concurrent.ExecutorService;
@@ -31,12 +31,13 @@ import java.util.concurrent.Executors;
  */
 public class TraceFragment extends Fragment {
 
-    private TraceViewModel viewModel;
+    private TraceViewModel contactsViewModel;
     private RecyclerView listView;
     private ContactsAdapter adapter;
     private LinearLayoutManager layoutManager;
     private Button clearButton;
     private ExecutorService es = Executors.newCachedThreadPool();
+    private SettingsViewModel settingsViewModel;
 
     public static TraceFragment newInstance() {
         return new TraceFragment();
@@ -59,9 +60,15 @@ public class TraceFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        viewModel = ViewModelProviders.of(this).get(TraceViewModel.class);
-        viewModel.getContacts().observe(getActivity(), contacts -> {
+        contactsViewModel = ViewModelProviders.of(this).get(TraceViewModel.class);
+        contactsViewModel.getContacts().observe(getActivity(), contacts -> {
             adapter.setContacts(contacts);
+            adapter.notifyDataSetChanged();
+        });
+
+        settingsViewModel = ViewModelProviders.of(this).get(SettingsViewModel.class);
+        settingsViewModel.getSettings().observe(getActivity(), settings -> {
+            adapter.setSettings(settings);
             adapter.notifyDataSetChanged();
         });
 
@@ -75,7 +82,7 @@ public class TraceFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                es.execute(() -> viewModel.clear());
+                es.execute(() -> contactsViewModel.clear());
             }
         });
     }

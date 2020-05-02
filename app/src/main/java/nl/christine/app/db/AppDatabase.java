@@ -22,7 +22,7 @@ import nl.christine.app.model.MySettings;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {MySettings.class, Contact.class}, views = {SettingsView.class}, version = 3)
+@Database(entities = {MySettings.class, Contact.class}, views = {SettingsView.class}, version = 4)
 public abstract class AppDatabase extends RoomDatabase {
 
      private static final Migration MIGRATION_2_3 = new Migration(2, 3) {
@@ -31,6 +31,17 @@ public abstract class AppDatabase extends RoomDatabase {
         public void migrate(SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE contact_table "
                     + " ADD COLUMN rssi INTEGER DEFAULT 0 NOT NULL");
+        }
+    };
+
+    private static final Migration MIGRATION_3_4 = new Migration(3, 4) {
+
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE settings_table "
+                    + " ADD COLUMN strengthcutoff INTEGER DEFAULT 0 NOT NULL");
+            database.execSQL("ALTER TABLE settings_table "
+                    + " ADD COLUMN contactscutoff INTEGER DEFAULT 0 NOT NULL");
         }
     };
 
@@ -63,7 +74,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             AppDatabase.class, "app_database")
-                            .addMigrations(MIGRATION_2_3)
+                            .addMigrations(MIGRATION_2_3, MIGRATION_3_4)
                             .addCallback(databaseCallback)
                             .addCallback(databaseCallback)
                             .build();

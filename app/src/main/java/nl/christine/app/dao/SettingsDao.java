@@ -46,4 +46,10 @@ public interface SettingsDao {
 
     @Query("update settings_table set timewindow = :mSecs where id = 0")
     void setTimeWindow(long mSecs);
+
+    @Query("update settings_table set contactscutoff = :numberOfContactsCutoffValue where id = 0")
+    void setNumberOfContactsCutoff(int numberOfContactsCutoffValue);
+
+    @Query("update settings_table set strengthcutoff = :cutoffStrength where id = 0")
+    void setCutoffStrength(int cutoffStrength);
 }

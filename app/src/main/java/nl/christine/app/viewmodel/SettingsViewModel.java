@@ -50,4 +50,12 @@ public class SettingsViewModel extends AndroidViewModel {
     public void setTimeWindow(long mSecs) {
         repository.setTimeWindow(mSecs);
     }
+
+    public void setNumberOfContactsCutoff(int numberOfContactsCutoffValue) {
+        repository.setNumberOfContactsCutoff(numberOfContactsCutoffValue);
+    }
+
+    public void setCutoffStrength(int cutoffStrength){
+        repository.setCutoffStrength(cutoffStrength);
+    }
 }

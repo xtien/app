@@ -7,6 +7,7 @@
 
 package nl.christine.app.adapter;
 
+import android.graphics.Color;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,13 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import nl.christine.app.R;
 import nl.christine.app.fragment.BaseViewHolder;
 import nl.christine.app.model.Contact;
+import nl.christine.app.model.MySettings;
 import org.apache.commons.lang3.time.FastDateFormat;
 
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class ContactsAdapter extends RecyclerView.Adapter<BaseViewHolder> {
@@ -32,6 +30,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     private SimpleDateFormat sFormat;
     List<Contact> contacts = new ArrayList<>();
     FastDateFormat format;
+    private MySettings settings;
 
     public ContactsAdapter(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -69,6 +68,10 @@ public class ContactsAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         this.contacts = contacts;
     }
 
+    public void setSettings(MySettings settings) {
+        this.settings = settings;
+    }
+
     private class ViewHolder extends BaseViewHolder {
 
         TextView contactIdView;
@@ -100,6 +103,22 @@ public class ContactsAdapter extends RecyclerView.Adapter<BaseViewHolder> {
             numberView.setText(String.valueOf(contact.getNumber()));
             powerView.setText(String.valueOf(contact.getPowerLevel()));
             rssiView.setText(String.valueOf(contact.getRssi()));
+
+            if(contact.getRssi() > settings.getStrengthCutoff() && contact.getNumber() > settings.getContactsCutoff()){
+                contactIdView.setTextColor(Color.RED);
+            } else {
+                contactIdView.setTextColor(Color.BLACK);
+            }
+            if(contact.getRssi() > settings.getStrengthCutoff()){
+                rssiView.setTextColor(Color.BLUE);
+            } else {
+                rssiView.setTextColor(Color.BLACK);
+            }
+            if(contact.getNumber() > settings.getContactsCutoff()){
+                numberView.setTextColor(Color.BLUE);
+            } else {
+                numberView.setTextColor(Color.BLACK);
+            }
         }
 
         @Override

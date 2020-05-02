@@ -66,4 +66,16 @@ public class SettingsRepository {
             settingsDao.setTimeWindow(mSecs);
         });
     }
+
+    public void setNumberOfContactsCutoff(int numberOfContactsCutoffValue) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            settingsDao.setNumberOfContactsCutoff(numberOfContactsCutoffValue);
+        });
+    }
+
+    public void setCutoffStrength(int cutoffStrength) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            settingsDao.setCutoffStrength(cutoffStrength);
+        });
+    }
 }

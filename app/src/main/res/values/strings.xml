@@ -51,5 +51,7 @@
     <string name="signal_strength">Signal strength</string>
     <string name="timewindow">Time window</string>
     <string name="id">ID:</string>
+    <string name="number_of_contacts">Number of detects</string>
+    <string name="cutoff_signal_strength">Cutoff signal strength</string>
 
 </resources>

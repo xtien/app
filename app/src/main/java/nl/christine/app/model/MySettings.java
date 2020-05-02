@@ -35,6 +35,12 @@ public class MySettings {
     @ColumnInfo(name = "uuid")
     private String uuid;
 
+    @ColumnInfo(name = "strengthcutoff")
+    private int strengthCutoff = 0;
+
+    @ColumnInfo(name = "contactscutoff")
+    private int contactsCutoff = 0;
+
     public boolean isPeripheral() {
         return isPeripheral;
     }
@@ -89,5 +95,21 @@ public class MySettings {
 
     public void setTimewindow(long timewindow) {
         this.timewindow = timewindow;
+    }
+
+    public int getStrengthCutoff() {
+        return strengthCutoff;
+    }
+
+    public void setStrengthCutoff(int strengthCutoff) {
+        this.strengthCutoff = strengthCutoff;
+    }
+
+    public int getContactsCutoff() {
+        return contactsCutoff;
+    }
+
+    public void setContactsCutoff(int contactsCutoff) {
+        this.contactsCutoff = contactsCutoff;
     }
 }

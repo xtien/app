@@ -135,56 +135,125 @@
                 android:layout_weight="1"
                 />
 
+    </LinearLayout>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
 
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                android:layout_marginTop="6dp"
+                >
+
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    style="@style/text"
+                    android:layout_weight="1"
+                    android:text="@string/advertising_mode"/>
+
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    style="@style/text"
+                    android:layout_weight="1"
+                    android:text="@string/signal_strength"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                android:layout_marginBottom="6dp"
+                >
+
+            <Spinner
+                    android:text="Advertise mode"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    style="@style/spinnerstyle"
+                    android:id="@+id/advertisemode_spinner"
+                    android:layout_weight="1"
+                    />
+
+            <Spinner
+                    android:text="Signal strength"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    style="@style/spinnerstyle"
+                    android:id="@+id/signalstrength_spinner"
+                    android:layout_weight="1"
+                    />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="6dp">
+            android:orientation="vertical"
+            >
 
-        <TextView
-                android:layout_width="wrap_content"
+        <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/text"
-                android:layout_weight="1"
-                android:text="@string/advertising_mode"/>
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                android:layout_marginTop="6dp"
+                >
 
-        <TextView
-                android:layout_width="wrap_content"
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    style="@style/text"
+                    android:layout_weight="1"
+                    android:text="@string/number_of_contacts"/>
+
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    style="@style/text"
+                    android:layout_weight="1"
+                    android:text="@string/cutoff_signal_strength"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/text"
-                android:layout_weight="1"
-                android:text="@string/signal_strength"/>
-    </LinearLayout>
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                android:layout_marginBottom="6dp"
+                >
 
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="6dp">
+            <Spinner
+                    android:text="Advertise mode"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    style="@style/spinnerstyle"
+                    android:id="@+id/numberofcontacts_spinner"
+                    android:layout_weight="1"
+                    />
 
-        <Spinner
-                android:text="Advertise mode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/spinnerstyle"
-                android:id="@+id/advertisemode_switch"
-                android:layout_weight="1"
-                />
-
-        <Spinner
-                android:text="Signal strength"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/spinnerstyle"
-                android:id="@+id/signalstrength_switch"
-                android:layout_weight="1"
-                />
+            <Spinner
+                    android:text="Signal strength"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    style="@style/spinnerstyle"
+                    android:id="@+id/cutoffsignalstrength_spinner"
+                    android:layout_weight="1"
+                    />
+        </LinearLayout>
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listview"
             android:scrollbars="none"
+            android:layout_marginTop="12dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 </LinearLayout>
