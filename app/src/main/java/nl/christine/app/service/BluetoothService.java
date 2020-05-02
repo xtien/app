@@ -84,10 +84,14 @@ public class BluetoothService extends Service {
         @Override
         public void onStartFailure(int errorCode) {
             super.onStartFailure(errorCode);
-            log("BLE", "Advertising onStartFailure: " + errorCode);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                if (!scanning) {
-                    notfManager.cancel(notificationId);
+            if (errorCode == 3) {  //TODO
+                Log.e(LOGTAG, "already started");
+            } else {
+                log("BLE", "Advertising onStartFailure: " + errorCode);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    if (!scanning) {
+                        notfManager.cancel(notificationId);
+                    }
                 }
             }
         }

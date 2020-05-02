@@ -7,7 +7,6 @@
 
 <resources>
     <string name="app_name">Christine\'s bluetooth test app</string>
-    <string name="lorem_ipsum">Lorem Ipsum</string>
     <string name="settings_title">Settings</string>
     <string name="tracing_title">Trace</string>
     <string name="event">Send event</string>
@@ -58,5 +57,15 @@
     <string name="power">pwr</string>
     <string name="number">nr</string>
     <string name="sig">sig</string>
+    <string name="intro">This app can send bluetooth low energy signals (\"advertise\") and detect BT LE signals (\"scan\").\n
+        In the main screen, you can set advertising and scanning on or off\n
+        You can also give your device a new advertising id, so hits show up as a different contact on scanning devices (\"new ID\").\n
+    You can adjust the advertise mode and signal strength for sending signals.\n\n
+    Signals that exceed a threshold strength and occure more than n times, will be marked in the Contacts screen. Red id means both number of hits and signal strength appy, blue means only one does.\n
+    You can adjust these values in the main screen.\n\n
+        In the main screen, newly detected devices show up on a list. In the Contacts page, you see the contacts accumulated.
+    </string>
+    <string name="scanning">Scan</string>
+    <string name="advertise">Advertise</string>
 
 </resources>

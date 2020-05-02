@@ -33,6 +33,13 @@
                     android:text="@string/help_title"
                     style="@style/title"
                     />
+            <TextView
+                    android:id="@+id/intro"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/intro"
+                    style="@style/text"
+                    />
 
             <TextView
                     android:id="@+id/help1_title"

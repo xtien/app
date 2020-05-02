@@ -118,7 +118,7 @@
             android:padding="6dp">
 
         <Switch
-                android:text="Discovering"
+                android:text="@string/scanning"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/discover_switch"
@@ -127,7 +127,7 @@
                 />
 
         <Switch
-                android:text="Peripheral"
+                android:text="@string/advertise"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/peripheral_switch"
