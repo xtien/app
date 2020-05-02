@@ -32,7 +32,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<BaseViewHolder> {
     FastDateFormat format;
     private MySettings settings;
 
-    public ContactsAdapter(){
+    public ContactsAdapter() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             format = FastDateFormat.getInstance("MM-dd kk:mm", TimeZone.getDefault(), Locale.getDefault());
         } else {

@@ -138,7 +138,6 @@ public class MainFragment extends Fragment {
 
         clearButton.setOnClickListener(v -> adapter.clear());
 
-
         discoverSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> settingsViewModel.setDiscovering(isChecked));
         peripheralSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> settingsViewModel.setPeripheral(isChecked));
 
@@ -228,6 +227,19 @@ public class MainFragment extends Fragment {
                 }
                 advertiseModeSpinner.setSelection(settings.getAdvertiseMode());
                 signalStrengthSpinner.setSelection(settings.getSignalStrength());
+
+                int strengthCutoff = settings.getStrengthCutoff();
+                for (int i = 0; i < cutoffStrengthValues.length; i++) {
+                    if (strengthCutoff == Integer.parseInt(cutoffStrengthValues[i])) {
+                        cutoffStrengthSpinner.setSelection(i);
+                    }
+                }
+                int numberCutoff = settings.getContactsCutoff();
+                for (int i = 0; i < numberOfContactsCutoffValues.length; i++) {
+                    if(numberCutoff == Integer.parseInt(numberOfContactsCutoffValues[i])){
+                        numberOfContactsCutoffSpinner.setSelection(i);
+                    }
+                }
             }
         });
 

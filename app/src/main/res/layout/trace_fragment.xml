@@ -40,6 +40,8 @@
                 android:layout_height="wrap_content"/>
     </LinearLayout>
 
+    <include layout="@layout/contact_item_header"/>
+
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listview"
             android:scrollbars="none"
