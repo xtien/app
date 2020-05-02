@@ -15,6 +15,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,7 @@ import java.util.UUID;
  */
 public class MainFragment extends Fragment {
 
+    private static final String LOGTAG = MainFragment.class.getSimpleName();
     private BluetoothAdapter bluetoothAdapter;
     private static final int PERMISSION_REQUEST_FINE_LOCATION = 1;
     private static final int PERMISSION_REQUEST_BACKGROUND_LOCATION = 2;
@@ -105,13 +107,11 @@ public class MainFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        timewindows.add(60000l);
-        timewindows.add(120000l);
-        timewindows.add(300000l);
-        timewindows.add(600000l);
-        timewindows.add(3600000l);
-
-        String[] signalStrenghts = getResources().getStringArray(R.array.signalstrength);
+        String[] timewindowValues = getResources().getStringArray(R.array.timewindow_values);
+        timewindows.clear();
+        for(String s : timewindowValues){
+            timewindows.add(Long.parseLong(s));
+        }
 
         SharedPreferences prefs = getActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
         uuidView.setText(prefs.getString("uuid", ""));
@@ -185,14 +185,16 @@ public class MainFragment extends Fragment {
         settingsViewModel.getSettings().observe(getActivity(), settings -> {
             discoverSwitch.setChecked(settings != null && settings.isDiscovering());
             peripheralSwitch.setChecked(settings != null && settings.isPeripheral());
-            long timeWindow = settings.getTimewindow();
-            for (int i = 0; i < timewindows.size(); i++) {
-                if (timewindows.get(i) == timeWindow) {
-                    timewindowSpinner.setSelection(i);
+            if (settings != null) {
+                long timeWindow = settings.getTimewindow();
+                for (int i = 0; i < timewindows.size(); i++) {
+                    if (timewindows.get(i) == timeWindow) {
+                        timewindowSpinner.setSelection(i);
+                    }
                 }
+                advertiseModeSpinner.setSelection(settings.getAdvertiseMode());
+                signalStrengthSpinner.setSelection(settings.getSignalStrength());
             }
-            advertiseModeSpinner.setSelection(settings.getAdvertiseMode());
-            signalStrengthSpinner.setSelection(settings.getSignalStrength());
         });
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();

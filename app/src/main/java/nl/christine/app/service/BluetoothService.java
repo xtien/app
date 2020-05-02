@@ -112,7 +112,7 @@ public class BluetoothService extends Service {
             byte[] data = result.getScanRecord().getServiceData(ParcelUuid.fromString(serviceDataUUIDString));
             if (data != null) {
                 String id = new String(data);
-                displayContact(id, scanRecord.getTxPowerLevel());
+                displayContact(id, scanRecord.getTxPowerLevel(), result.getRssi());
             }
         }
     };
@@ -135,36 +135,38 @@ public class BluetoothService extends Service {
 
         observer = settings -> {
 
-            advertiseMode = settings.getAdvertiseMode();
-            signalStrength = settings.getSignalStrength();
-            timeWindow = settings.getTimewindow();
+            if (settings != null) {
+                advertiseMode = settings.getAdvertiseMode();
+                signalStrength = settings.getSignalStrength();
+                timeWindow = settings.getTimewindow();
 
-            if (settings.isDiscovering()) {
-                if (!scanning) {
-                    BluetoothService.this.scanLeDevice(true);
+                if (settings.isDiscovering()) {
+                    if (!scanning) {
+                        BluetoothService.this.scanLeDevice(true);
+                    }
+                } else {
+                    if (scanning) {
+                        BluetoothService.this.scanLeDevice(false);
+                    }
                 }
-            } else {
-                if (scanning) {
-                    BluetoothService.this.scanLeDevice(false);
-                }
-            }
 
-            boolean advertisingHandled = false;
-            if (settings.isPeripheral()) {
-                if (!advertising) {
-                    advertisingHandled = true;
-                    BluetoothService.this.advertise();
+                boolean advertisingHandled = false;
+                if (settings.isPeripheral()) {
+                    if (!advertising) {
+                        advertisingHandled = true;
+                        BluetoothService.this.advertise();
+                    }
+                } else {
+                    if (advertising) {
+                        advertisingHandled = true;
+                        BluetoothService.this.stopAdvertising();
+                    }
                 }
-            } else {
-                if (advertising) {
-                    advertisingHandled = true;
-                    BluetoothService.this.stopAdvertising();
-                }
-            }
 
-            if (!advertisingHandled && advertising) {
-                es.execute(() -> BluetoothService.this.stopAdvertising());
-                es.schedule(() -> BluetoothService.this.advertise(), 100l, TimeUnit.MILLISECONDS);
+                if (!advertisingHandled && advertising) {
+                    es.execute(() -> BluetoothService.this.stopAdvertising());
+                    es.schedule(() -> BluetoothService.this.advertise(), 100l, TimeUnit.MILLISECONDS);
+                }
             }
         };
 
@@ -228,24 +230,24 @@ public class BluetoothService extends Service {
         sendBroadcast(icycle);
     }
 
-    private void displayContact(String id, int txPowerLevel) {
+    private void displayContact(String id, int txPowerLevel, int rssi) {
 
         es.execute(() -> {
             Contact existingContact = contacts.get(id);
             if (existingContact == null) {
-                Contact newContact = new Contact(id, txPowerLevel, System.currentTimeMillis());
+                Contact newContact = new Contact(id, txPowerLevel, rssi, System.currentTimeMillis());
                 contactRepository.create(newContact);
                 contacts.put(id, newContact);
-                log(LOGTAG, "id: " + id + " power " + txPowerLevel);
+                log(LOGTAG, "id: " + id + " power " + txPowerLevel + " " + rssi);
             } else {
                 Contact foundContact = contactRepository.getContact(existingContact, timeWindow);
                 if (foundContact != null) {
                     existingContact = foundContact;
                 }
                 existingContact.plusplus();
-                if (txPowerLevel > existingContact.getPowerLevel()) {
-                    existingContact.setPowerLevel(txPowerLevel);
-                    log(LOGTAG, "id: " + id + " power " + txPowerLevel);
+                if (rssi > existingContact.getRssi()) {
+                    existingContact.setPowerLevel(rssi);
+                    log(LOGTAG, "id: " + id + " power " + txPowerLevel + " " + rssi);
                 }
                 contacts.put(existingContact.getContactId(), existingContact);
                 contactRepository.update(existingContact);

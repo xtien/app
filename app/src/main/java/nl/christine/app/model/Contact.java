@@ -25,14 +25,17 @@ public class Contact {
     private int number;
     @ColumnInfo(name = "time")
     private long time;
+    @ColumnInfo(name = "rssi")
+    private int rssi;
 
     public Contact() {
 
     }
 
-    public Contact(String contactId, int txPowerLevel, long currentTimeMillis) {
+    public Contact(String contactId, int txPowerLevel, int rssi, long currentTimeMillis) {
         this.contactId = contactId;
         this.powerLevel = txPowerLevel;
+        this.rssi = rssi;
         this.time = currentTimeMillis;
         this.number = 1;
     }
@@ -81,11 +84,11 @@ public class Contact {
         this.id = id;
     }
 
-    public String getNumberString() {
-        return String.valueOf(number);
+    public int getRssi() {
+        return rssi;
     }
 
-    public String getPowerLevelString() {
-        return String.valueOf(powerLevel);
+    public void setRssi(int rssi) {
+        this.rssi = rssi;
     }
 }

@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 import nl.christine.app.dao.ContactDao;
 import nl.christine.app.dao.SettingsDao;
@@ -21,8 +22,17 @@ import nl.christine.app.model.MySettings;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {MySettings.class, Contact.class}, views = {SettingsView.class}, version = 2)
+@Database(entities = {MySettings.class, Contact.class}, views = {SettingsView.class}, version = 3)
 public abstract class AppDatabase extends RoomDatabase {
+
+     private static final Migration MIGRATION_2_3 = new Migration(2, 3) {
+
+        @Override
+        public void migrate(SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE contact_table "
+                    + " ADD COLUMN rssi INTEGER DEFAULT 0 NOT NULL");
+        }
+    };
 
     private static Callback databaseCallback = new RoomDatabase.Callback() {
 
@@ -53,8 +63,9 @@ public abstract class AppDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             AppDatabase.class, "app_database")
+                            .addMigrations(MIGRATION_2_3)
                             .addCallback(databaseCallback)
-                            .fallbackToDestructiveMigration()
+                            .addCallback(databaseCallback)
                             .build();
                 }
             }

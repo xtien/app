@@ -28,4 +28,12 @@
         <item>10 minutes</item>
         <item>1 hour</item>
     </string-array>
+
+    <string-array name="timewindow_values">
+        <item>60000</item>
+        <item>120000</item>
+        <item>300000</item>
+        <item>600000</item>
+        <item>3600000</item>
+    </string-array>
 </resources>

@@ -75,6 +75,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<BaseViewHolder> {
         TextView timeView;
         TextView numberView;
         TextView powerView;
+        TextView rssiView;
 
         public ViewHolder(View view) {
             super(view);
@@ -82,6 +83,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<BaseViewHolder> {
             timeView = view.findViewById(R.id.time);
             numberView = view.findViewById(R.id.number);
             powerView = view.findViewById(R.id.power);
+            rssiView = view.findViewById(R.id.rssi);
         }
 
         @Override
@@ -95,8 +97,9 @@ public class ContactsAdapter extends RecyclerView.Adapter<BaseViewHolder> {
             } else {
                 timeView.setText(sFormat.format(date));
             }
-            numberView.setText(contact.getNumberString());
-            powerView.setText(contact.getPowerLevelString());
+            numberView.setText(String.valueOf(contact.getNumber()));
+            powerView.setText(String.valueOf(contact.getPowerLevel()));
+            rssiView.setText(String.valueOf(contact.getRssi()));
         }
 
         @Override
