@@ -43,7 +43,8 @@ advertise the right UUID (built into the app, this is not the id mentioned above
  - ID
  - date and time
  - number of detections
- - signal strength
+ - signal strength set by sender
+ - the actual strength
  One could use a combination of signal strength and number of detections to determine whether a contact
  needs to be registered as a "detected contact". Number of detections is done within a limited time frame, 15 minutes.
  
