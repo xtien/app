@@ -14,7 +14,7 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "settings_table")
 public class MySettings {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
 
     @ColumnInfo(name = "peripheral")
