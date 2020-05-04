@@ -48,10 +48,10 @@
     <string name="help12">ID, date, time, number of detections, power set by sender, power received. Power is a mostly negative number as it is measured in dB.</string>
     <string name="advertising_mode">Advertising mode</string>
     <string name="signal_strength">Signal strength</string>
-    <string name="timewindow">Time window</string>
+    <string name="timewindow">Time window for detection</string>
     <string name="id">ID:</string>
-    <string name="number_of_contacts">Number of detects</string>
-    <string name="cutoff_signal_strength">Cutoff signal strength</string>
+    <string name="number_of_contacts">Minimum nr of detects</string>
+    <string name="cutoff_signal_strength">Minimum signal strength</string>
     <string name="day">day</string>
     <string name="time">time</string>
     <string name="power">pwr</string>

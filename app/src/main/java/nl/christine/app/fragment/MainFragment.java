@@ -76,8 +76,6 @@ public class MainFragment extends Fragment {
             listView.smoothScrollToPosition(adapter.getItemCount() - 1);
         }
     };
-    private Spinner cutoffStrengthSpinner;
-    private Spinner numberOfContactsCutoffSpinner;
 
     public static MainFragment newInstance() {
         return new MainFragment();
@@ -102,8 +100,6 @@ public class MainFragment extends Fragment {
         newIDButton = view.findViewById(R.id.new_id);
         timewindowSpinner = view.findViewById(R.id.timewindow);
         versionView = view.findViewById(R.id.version);
-        cutoffStrengthSpinner = view.findViewById(R.id.cutoffsignalstrength_spinner);
-        numberOfContactsCutoffSpinner = view.findViewById(R.id.numberofcontacts_spinner);
     }
 
     @Override
@@ -115,8 +111,6 @@ public class MainFragment extends Fragment {
         for (String s : timewindowValues) {
             timewindows.add(Long.parseLong(s));
         }
-        String[] numberOfContactsCutoffValues = getResources().getStringArray(R.array.number_of_contacts_cutoff);
-        String[] cutoffStrengthValues = getResources().getStringArray(R.array.cutoff_strength);
 
         SharedPreferences prefs = getActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
         uuidView.setText(prefs.getString("uuid", ""));
@@ -176,35 +170,6 @@ public class MainFragment extends Fragment {
             }
         });
 
-        numberOfContactsCutoffSpinner.setAdapter(ArrayAdapter.createFromResource(getActivity(), R.array.number_of_contacts_cutoff, android.R.layout.simple_spinner_item));
-        numberOfContactsCutoffSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                settingsViewModel.setNumberOfContactsCutoff(Integer.parseInt(numberOfContactsCutoffValues[position]));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        cutoffStrengthSpinner.setAdapter((ArrayAdapter.createFromResource(getActivity(), R.array.cutoff_strength, android.R.layout.simple_spinner_item)));
-        cutoffStrengthSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                settingsViewModel.setCutoffStrength(Integer.parseInt(cutoffStrengthValues[position]));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
         timewindowSpinner.setAdapter(ArrayAdapter.createFromResource(getActivity(), R.array.timewindow, android.R.layout.simple_spinner_item));
         timewindowSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -223,6 +188,7 @@ public class MainFragment extends Fragment {
         settingsViewModel.getSettings().observe(getActivity(), settings -> {
             discoverSwitch.setChecked(settings != null && settings.isDiscovering());
             peripheralSwitch.setChecked(settings != null && settings.isPeripheral());
+
             if (settings != null) {
                 long timeWindow = settings.getTimewindow();
                 for (int i = 0; i < timewindows.size(); i++) {
@@ -233,19 +199,7 @@ public class MainFragment extends Fragment {
                 advertiseModeSpinner.setSelection(settings.getAdvertiseMode());
                 signalStrengthSpinner.setSelection(settings.getSignalStrength());
 
-                int strengthCutoff = settings.getStrengthCutoff();
-                for (int i = 0; i < cutoffStrengthValues.length; i++) {
-                    if (strengthCutoff == Integer.parseInt(cutoffStrengthValues[i])) {
-                        cutoffStrengthSpinner.setSelection(i);
-                    }
-                }
-                int numberCutoff = settings.getContactsCutoff();
-                for (int i = 0; i < numberOfContactsCutoffValues.length; i++) {
-                    if(numberCutoff == Integer.parseInt(numberOfContactsCutoffValues[i])){
-                        numberOfContactsCutoffSpinner.setSelection(i);
-                    }
-                }
-            }
+             }
         });
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();

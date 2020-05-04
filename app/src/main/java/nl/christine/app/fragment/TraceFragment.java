@@ -11,7 +11,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -38,6 +41,8 @@ public class TraceFragment extends Fragment {
     private Button clearButton;
     private ExecutorService es = Executors.newCachedThreadPool();
     private SettingsViewModel settingsViewModel;
+    private Spinner cutoffStrengthSpinner;
+    private Spinner numberOfContactsCutoffSpinner;
 
     public static TraceFragment newInstance() {
         return new TraceFragment();
@@ -54,11 +59,16 @@ public class TraceFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         listView = view.findViewById(R.id.listview);
         clearButton = view.findViewById(R.id.clearcontacts);
+        cutoffStrengthSpinner = view.findViewById(R.id.cutoffsignalstrength_spinner);
+        numberOfContactsCutoffSpinner = view.findViewById(R.id.numberofcontacts_spinner);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        String[] numberOfContactsCutoffValues = getResources().getStringArray(R.array.number_of_contacts_cutoff);
+        String[] cutoffStrengthValues = getResources().getStringArray(R.array.cutoff_strength);
 
         contactsViewModel = ViewModelProviders.of(this).get(TraceViewModel.class);
         contactsViewModel.getContacts().observe(getActivity(), contacts -> {
@@ -70,6 +80,20 @@ public class TraceFragment extends Fragment {
         settingsViewModel.getSettings().observe(getActivity(), settings -> {
             adapter.setSettings(settings);
             adapter.notifyDataSetChanged();
+
+            int strengthCutoff = settings.getStrengthCutoff();
+            for (int i = 0; i < cutoffStrengthValues.length; i++) {
+                if (strengthCutoff == Integer.parseInt(cutoffStrengthValues[i])) {
+                    cutoffStrengthSpinner.setSelection(i);
+                }
+            }
+            int numberCutoff = settings.getContactsCutoff();
+            for (int i = 0; i < numberOfContactsCutoffValues.length; i++) {
+                if(numberCutoff == Integer.parseInt(numberOfContactsCutoffValues[i])){
+                    numberOfContactsCutoffSpinner.setSelection(i);
+                }
+            }
+
         });
 
         adapter = new ContactsAdapter();
@@ -77,13 +101,37 @@ public class TraceFragment extends Fragment {
         listView.setLayoutManager(layoutManager);
         listView.setAdapter(adapter);
 
-        clearButton.setOnClickListener(new View.OnClickListener() {
+        clearButton.setOnClickListener(v -> es.execute(() -> contactsViewModel.clear()));
+
+
+        numberOfContactsCutoffSpinner.setAdapter(ArrayAdapter.createFromResource(getActivity(), R.array.number_of_contacts_cutoff, android.R.layout.simple_spinner_item));
+        numberOfContactsCutoffSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
-            public void onClick(View v) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                es.execute(() -> contactsViewModel.clear());
+                settingsViewModel.setNumberOfContactsCutoff(Integer.parseInt(numberOfContactsCutoffValues[position]));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
+
+        cutoffStrengthSpinner.setAdapter((ArrayAdapter.createFromResource(getActivity(), R.array.cutoff_strength, android.R.layout.simple_spinner_item)));
+        cutoffStrengthSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                settingsViewModel.setCutoffStrength(Integer.parseInt(cutoffStrengthValues[position]));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
     }
 }

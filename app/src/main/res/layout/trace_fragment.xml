@@ -39,6 +39,60 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
     </LinearLayout>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                android:layout_marginTop="6dp"
+                >
+
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    style="@style/text"
+                    android:layout_weight="1"
+                    android:text="@string/number_of_contacts"/>
+
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    style="@style/text"
+                    android:layout_weight="1"
+                    android:text="@string/cutoff_signal_strength"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                android:layout_marginBottom="6dp"
+                >
+
+            <Spinner
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    style="@style/spinnerstyle"
+                    android:id="@+id/numberofcontacts_spinner"
+                    android:layout_weight="1"
+                    />
+
+            <Spinner
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    style="@style/spinnerstyle"
+                    android:id="@+id/cutoffsignalstrength_spinner"
+                    android:layout_weight="1"
+                    />
+        </LinearLayout>
+    </LinearLayout>
 
     <include layout="@layout/contact_item_header"/>
 
