@@ -62,6 +62,7 @@ The Bluetooth UUID defines a service, like heartrate, headphone or battery.
  One could use a combination of signal strength and number of detections to determine whether 
  a contact needs to be registered as a "detected contact". Number of detections is done within 
  a limited time frame, 15 minutes.
+ In the screen, you can set the threshold for signal strength and number of detections for a "hit". 
  
  The clear button on the right clears the database and the contact screen. 
  
