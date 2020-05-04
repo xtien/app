@@ -208,7 +208,6 @@ public class BluetoothService extends Service {
                 .setAdvertiseMode(advertiseMode)
                 .setTxPowerLevel(signalStrength)
                 .setConnectable(true)
-                .setTimeout(180000)
                 .build();
 
         ParcelUuid serviceUUID = new ParcelUuid(UUID.fromString(serviceUUIDString));
