@@ -119,20 +119,24 @@
 
         <Switch
                 android:text="@string/scanning"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/discover_switch"
                 style="@style/switchstyle"
-                android:layout_weight="1"
+                 android:layout_weight="3"
                 />
+        <View
+                android:layout_width="0dp"
+                android:layout_height="5dp"
+                android:layout_weight="1"/>
 
         <Switch
                 android:text="@string/advertise"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/peripheral_switch"
+                 android:id="@+id/peripheral_switch"
                 style="@style/switchstyle"
-                android:layout_weight="1"
+                android:layout_weight="3"
                 />
 
     </LinearLayout>
@@ -154,14 +158,18 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     style="@style/text"
-                    android:layout_weight="1"
+                    android:layout_weight="3"
                     android:text="@string/advertising_mode"/>
+            <View
+                    android:layout_width="0dp"
+                    android:layout_height="5dp"
+                    android:layout_weight="1"/>
 
             <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     style="@style/text"
-                    android:layout_weight="1"
+                    android:layout_weight="3"
                     android:text="@string/signal_strength"/>
         </LinearLayout>
 
@@ -178,15 +186,19 @@
                     android:layout_height="wrap_content"
                     style="@style/spinnerstyle"
                     android:id="@+id/advertisemode_spinner"
-                    android:layout_weight="1"
+                    android:layout_weight="3"
                     />
+            <View
+                    android:layout_width="0dp"
+                    android:layout_height="5dp"
+                    android:layout_weight="1"/>
 
             <Spinner
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     style="@style/spinnerstyle"
                     android:id="@+id/signalstrength_spinner"
-                    android:layout_weight="1"
+                    android:layout_weight="3"
                     />
         </LinearLayout>
     </LinearLayout>

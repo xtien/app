@@ -11,7 +11,7 @@
     <string name="tracing_title">Trace</string>
     <string name="event">Send event</string>
     <string name="sick">Send sick</string>
-    <string name="local_service_label">bluetooth</string>
+    <string name="local_service_label">Christine\'s bluetooth LE test service</string>
     <string name="local_service_started">service started</string>
     <string name="local_service_stopped">service</string>
     <string name="no_bluetooth">Device doesn\'t support bluetooth</string>

@@ -10,6 +10,7 @@ package nl.christine.app.db;
 import android.annotation.TargetApi;
 import android.app.Application;
 import android.os.Build;
+import android.util.Log;
 import androidx.lifecycle.LiveData;
 import nl.christine.app.dao.ContactDao;
 import nl.christine.app.model.Contact;
@@ -20,6 +21,7 @@ import java.util.Optional;
 
 public class ContactRepository {
 
+    private static final String LOGTAG = ContactRepository.class.getSimpleName();
     private ContactDao contactDao;
     private LiveData<List<Contact>> contacts;
 
@@ -52,31 +54,14 @@ public class ContactRepository {
     }
 
     public Contact getContact(Contact existingContact, long timeWindow) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            return _getContact(existingContact, timeWindow);
-        } else {
-            return __getContact(existingContact, timeWindow);
-        }
-        }
-
-    private Contact __getContact(Contact existingContact, long timeWindow) {
-        long t = System.currentTimeMillis() - timeWindow;
-        List<Contact> contacts = contactDao.getContactByContactID(existingContact.getContactId());
-        long newest = 0l;
-        Contact result = null;
-        for(Contact contact : contacts){
-            if(contact.getTime()>newest && contact.getTime() > t){
-                result = contact;
+        long time = System.currentTimeMillis() - timeWindow;
+        List<Contact> contacts = contactDao.getContactByContactID(existingContact.getContactId(), time);
+        if (contacts != null) {
+            if (contacts.size() > 1) {
+                Log.e(LOGTAG, "More than one contact found, this shouldn't happen");
             }
+            return contacts.get(0);
         }
-        return result;
-    }
-
-
-    @TargetApi(Build.VERSION_CODES.N)
-    public Contact _getContact(Contact existingContact, long timeWindow) {
-        long t = System.currentTimeMillis() - timeWindow;
-        List<Contact> contacts = contactDao.getContactByContactID(existingContact.getContactId());
-        return contacts.stream().max(Comparator.comparing(Contact::getTime)).filter(c -> c.getTime() > t).get();
+        return null;
     }
 }

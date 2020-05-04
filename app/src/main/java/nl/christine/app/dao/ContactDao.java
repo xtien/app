@@ -31,6 +31,6 @@ public interface ContactDao {
     @Query("delete from contact_table")
     void clear();
 
-    @Query("select * from contact_table where contactId = :contactId")
-    List<Contact> getContactByContactID(String contactId);
+    @Query("select * from contact_table where contactId = :contactId and time > :time")
+    List<Contact> getContactByContactID(String contactId, long time);
 }
