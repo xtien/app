@@ -27,7 +27,6 @@ import nl.christine.app.model.Contact;
 import nl.christine.app.model.MySettings;
 
 import java.util.*;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -53,7 +52,6 @@ public class BluetoothService extends Service {
     private SettingsRepository repository;
     private Observer<MySettings> observer;
 
-    private Map<String, Contact> contacts = new HashMap<>();
     private ContactRepository contactRepository;
     private int notificationId = 37;
     private int advertiseMode = 0;
@@ -116,7 +114,7 @@ public class BluetoothService extends Service {
             byte[] data = result.getScanRecord().getServiceData(ParcelUuid.fromString(serviceDataUUIDString));
             if (data != null) {
                 String id = new String(data);
-                displayContact(id, scanRecord.getTxPowerLevel(), result.getRssi());
+                updateContact(id, scanRecord.getTxPowerLevel(), result.getRssi());
             }
         }
     };
@@ -234,26 +232,20 @@ public class BluetoothService extends Service {
         sendBroadcast(icycle);
     }
 
-    private void displayContact(String id, int txPowerLevel, int rssi) {
+    private void updateContact(String id, int txPowerLevel, int rssi) {
 
         es.execute(() -> {
-            Contact existingContact = contacts.get(id);
+            Contact existingContact = contactRepository.getContact(id, timeWindow);
+            log(LOGTAG, "id: " + id + " power " + txPowerLevel + " " + rssi);
+
             if (existingContact == null) {
                 Contact newContact = new Contact(id, txPowerLevel, rssi, System.currentTimeMillis());
                 contactRepository.create(newContact);
-                contacts.put(id, newContact);
-                log(LOGTAG, "id: " + id + " power " + txPowerLevel + " " + rssi);
             } else {
-                Contact foundContact = contactRepository.getContact(existingContact, timeWindow);
-                if (foundContact != null) {
-                    existingContact = foundContact;
-                }
                 existingContact.plusplus();
                 if (rssi > existingContact.getRssi()) {
                     existingContact.setRssi(rssi);
-                    log(LOGTAG, "id: " + id + " power " + txPowerLevel + " " + rssi);
                 }
-                contacts.put(existingContact.getContactId(), existingContact);
                 contactRepository.update(existingContact);
             }
         });

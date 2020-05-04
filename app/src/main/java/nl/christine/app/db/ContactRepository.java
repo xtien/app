@@ -53,10 +53,10 @@ public class ContactRepository {
         contactDao.clear();
     }
 
-    public Contact getContact(Contact existingContact, long timeWindow) {
+    public Contact getContact(String id, long timeWindow) {
         long time = System.currentTimeMillis() - timeWindow;
-        List<Contact> contacts = contactDao.getContactByContactID(existingContact.getContactId(), time);
-        if (contacts != null) {
+        List<Contact> contacts = contactDao.getContactByContactID(id, time);
+        if (!contacts.isEmpty()) {
             if (contacts.size() > 1) {
                 Log.e(LOGTAG, "More than one contact found, this shouldn't happen");
             }
