@@ -63,7 +63,7 @@ public abstract class AppDatabase extends RoomDatabase {
             databaseWriteExecutor.execute(() -> {
                 SettingsDao settingsDao = INSTANCE.settingsDao();
                 MySettings settings = new MySettings();
-                settings.setId(0);
+                settings.setSettingsId(0);
                 settingsDao.insert(settings);
             });
         }

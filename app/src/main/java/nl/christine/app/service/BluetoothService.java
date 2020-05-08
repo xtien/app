@@ -71,7 +71,7 @@ public class BluetoothService extends Service {
         @Override
         public void onStartSuccess(AdvertiseSettings settingsInEffect) {
             super.onStartSuccess(settingsInEffect);
-            log(LOGTAG, "advertising onStartSuccess " + uuidString);
+            log(LOGTAG, "advertising onStartSuccess " + uuidString + " tx power " + settingsInEffect.getTxPowerLevel());
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 if (!scanning) {
                     showPermanentNotification(R.string.local_service_started);
